@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 
+import heroImage from "@/assets/hero-sneakers.jpg";
 import { ProductCard } from "@/components/site/ProductCard";
 import { supabase } from "@/integrations/supabase/client";
 import { CATEGORIES, CONDITIONS, STORE_NAME, whatsappLink, type Product } from "@/lib/shop";
