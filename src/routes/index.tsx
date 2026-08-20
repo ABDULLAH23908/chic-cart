@@ -42,8 +42,15 @@ function Home() {
 
   return (
     <div>
-      <section className="border-b border-border bg-foreground text-background">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28">
+      <section className="relative overflow-hidden border-b border-border bg-foreground text-background">
+        <img
+          src={heroImage}
+          alt="Worn vintage sneakers on concrete"
+          width={1920}
+          height={1088}
+          className="absolute inset-0 h-full w-full object-cover opacity-40"
+        />
+        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28">
           <p className="label-caps text-background/60">100+ brands · one thrift stop</p>
           <h1 className="mt-5 max-w-3xl text-5xl leading-[0.95] font-black uppercase sm:text-7xl">
             Worn once.
