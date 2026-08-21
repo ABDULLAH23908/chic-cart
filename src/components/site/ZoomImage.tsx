@@ -15,7 +15,7 @@ export function ZoomImage({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
-  const [pos, setPos] = useState({ lx: 0, ly: 0 });
+  const [pos, setPos] = useState({ lx: 0, ly: 0, width: 0, height: 0 });
 
   const move = (clientX: number, clientY: number) => {
     const el = containerRef.current;
@@ -23,7 +23,13 @@ export function ZoomImage({
     const rect = el.getBoundingClientRect();
     const lx = Math.min(Math.max(clientX - rect.left, 0), rect.width);
     const ly = Math.min(Math.max(clientY - rect.top, 0), rect.height);
-    setPos({ lx, ly });
+    
+    setPos({
+      lx,
+      ly,
+      width: rect.width,
+      height: rect.height,
+    });
   };
 
   const lensSize = 150;
@@ -58,8 +64,9 @@ export function ZoomImage({
             top: pos.ly - lensSize / 2,
             backgroundImage: `url(${src})`,
             backgroundRepeat: "no-repeat",
-            backgroundSize: `${zoom * 100}% ${zoom * 100}%`,
-            // Center the zoomed image point under the cursor
+            // Scale background relative to the full container size, not the lens size
+            backgroundSize: `${pos.width * zoom}px ${pos.height * zoom}px`,
+            // Offset background to point directly under the lens center
             backgroundPosition: `-${pos.lx * zoom - lensSize / 2}px -${pos.ly * zoom - lensSize / 2}px`,
           }}
         />
