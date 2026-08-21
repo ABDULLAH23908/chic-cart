@@ -44,7 +44,7 @@ function Home() {
         .order("created_at", { ascending: false })
         .limit(12);
       if (error) throw error;
-      return orderForStorefront(data as Product[]);
+      return orderForStorefront(data as Product[]).slice(0, 6);
     },
   });
 
