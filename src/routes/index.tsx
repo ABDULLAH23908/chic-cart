@@ -35,9 +35,9 @@ function Home() {
         .from("products")
         .select("*")
         .order("created_at", { ascending: false })
-        .limit(6);
+        .limit(12);
       if (error) throw error;
-      return data as Product[];
+      return orderForStorefront(data as Product[]);
     },
   });
 
