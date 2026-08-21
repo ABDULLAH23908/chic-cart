@@ -5,7 +5,14 @@ import { ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-sneakers.jpg";
 import { ProductCard } from "@/components/site/ProductCard";
 import { supabase } from "@/integrations/supabase/client";
-import { CATEGORIES, CONDITIONS, STORE_NAME, whatsappLink, type Product } from "@/lib/shop";
+import {
+  CATEGORIES,
+  CONDITIONS,
+  STORE_NAME,
+  orderForStorefront,
+  whatsappLink,
+  type Product,
+} from "@/lib/shop";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -35,9 +42,9 @@ function Home() {
         .from("products")
         .select("*")
         .order("created_at", { ascending: false })
-        .limit(6);
+        .limit(12);
       if (error) throw error;
-      return data as Product[];
+      return orderForStorefront(data as Product[]).slice(0, 6);
     },
   });
 

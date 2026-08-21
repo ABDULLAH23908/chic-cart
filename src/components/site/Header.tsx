@@ -18,8 +18,19 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-foreground/15 bg-foreground text-background">
-      <div className="mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:px-6">
-        <Link to="/" className="font-display text-lg font-black tracking-[0.2em] uppercase">
+      <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6">
+        <button
+          onClick={() => setOpen((v) => !v)}
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center border border-background/25 md:hidden"
+          aria-label="Toggle menu"
+        >
+          {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+        </button>
+
+        <Link
+          to="/"
+          className="font-display shrink-0 text-lg font-black tracking-[0.2em] uppercase"
+        >
           {STORE_NAME.split(" ")[0]}
           <span className="text-background/50">/</span>
         </Link>
@@ -37,7 +48,15 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
+          <a
+            href={whatsappLink("Hi! I want to order from " + STORE_NAME)}
+            target="_blank"
+            rel="noreferrer"
+            className="label-caps hidden bg-whatsapp px-4 py-3 text-white transition-opacity hover:opacity-90 sm:inline-block"
+          >
+            Order on WhatsApp
+          </a>
           <Link
             to="/cart"
             className="relative inline-flex h-10 w-10 items-center justify-center border border-background/25 transition-colors hover:bg-background hover:text-foreground"
@@ -50,21 +69,6 @@ export function Header() {
               </span>
             )}
           </Link>
-          <a
-            href={whatsappLink("Hi! I want to order from " + STORE_NAME)}
-            target="_blank"
-            rel="noreferrer"
-            className="label-caps hidden bg-whatsapp px-4 py-3 text-white transition-opacity hover:opacity-90 sm:inline-block"
-          >
-            Order on WhatsApp
-          </a>
-          <button
-            onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center border border-background/25 md:hidden"
-            aria-label="Toggle menu"
-          >
-            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          </button>
         </div>
       </div>
 

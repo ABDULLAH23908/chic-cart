@@ -3,7 +3,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 
 import { ProductCard } from "@/components/site/ProductCard";
 import { supabase } from "@/integrations/supabase/client";
-import { CATEGORIES, CONDITIONS, type Product } from "@/lib/shop";
+import { CATEGORIES, CONDITIONS, orderForStorefront, type Product } from "@/lib/shop";
 
 type ShopSearch = {
   category?: string | undefined;
@@ -49,7 +49,7 @@ function ShopPage() {
       else query = query.order("created_at", { ascending: false });
       const { data, error } = await query;
       if (error) throw error;
-      return data as Product[];
+      return orderForStorefront(data as Product[]);
     },
   });
 
