@@ -391,15 +391,48 @@ function AdminDashboard({ email }: { email: string }) {
         </form>
 
         <section>
-          <h2 className="text-xl font-black uppercase">
-            Inventory {products ? `(${products.length})` : ""}
-          </h2>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-xl font-black uppercase">
+              All products {products ? `(${products.length})` : ""}
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {(["all", "in-stock", "sold"] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setTab(t)}
+                  className={
+                    "label-caps border px-3 py-2 " +
+                    (tab === t
+                      ? "border-foreground bg-foreground text-background"
+                      : "border-border hover:border-foreground")
+                  }
+                >
+                  {t === "all" ? "All" : t === "in-stock" ? `In stock (${counts.inStock})` : `Sold (${counts.sold})`}
+                </button>
+              ))}
+            </div>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Marking a pair sold moves it to the end of the store listings and hides it from the
+            store automatically 24 hours later.
+          </p>
           <ul className="mt-5 divide-y divide-border border-y border-border">
-            {products?.map((p) => (
-              <li key={p.id} className="grid grid-cols-[64px_minmax(0,1fr)_auto] items-center gap-4 py-3">
-                <div className="h-16 w-16 shrink-0 bg-secondary">
+            {visible.map((p) => (
+              <li
+                key={p.id}
+                className={
+                  "grid grid-cols-[64px_minmax(0,1fr)_auto] items-center gap-4 py-3 " +
+                  (p.in_stock ? "" : "opacity-70")
+                }
+              >
+                <div className="relative h-16 w-16 shrink-0 bg-secondary">
                   {p.images[0] && (
                     <img src={p.images[0]} alt="" className="h-full w-full object-cover" />
+                  )}
+                  {!p.in_stock && (
+                    <span className="absolute inset-x-0 bottom-0 bg-foreground py-0.5 text-center text-[9px] font-bold tracking-widest text-background">
+                      SOLD
+                    </span>
                   )}
                 </div>
                 <div className="min-w-0">
@@ -414,13 +447,23 @@ function AdminDashboard({ email }: { email: string }) {
                     {p.category} · {p.size || "no size"} · {p.condition}
                   </p>
                   <p className="text-sm">{formatPKR(p.price)}</p>
+                  {!p.in_stock && (
+                    <p className="label-caps text-muted-foreground">
+                      {isHiddenSold(p)
+                        ? "Hidden from store"
+                        : `Hides from store in ${soldHoursLeft(p.sold_at)}h`}
+                    </p>
+                  )}
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
                   <button
                     onClick={() => toggleStock.mutate({ id: p.id, in_stock: !p.in_stock })}
-                    className="label-caps border border-border px-3 py-2"
+                    className={
+                      "label-caps border px-3 py-2 " +
+                      (p.in_stock ? "border-border" : "border-foreground bg-foreground text-background")
+                    }
                   >
-                    {p.in_stock ? "In stock" : "Sold"}
+                    {p.in_stock ? "Mark sold" : "Restock"}
                   </button>
                   <button
                     onClick={() => removeProduct.mutate(p.id)}
@@ -433,9 +476,9 @@ function AdminDashboard({ email }: { email: string }) {
               </li>
             ))}
           </ul>
-          {products?.length === 0 && (
+          {visible.length === 0 && (
             <p className="py-12 text-center text-sm text-muted-foreground">
-              No products yet — add your first pair.
+              {products?.length ? "Nothing in this tab." : "No products yet — add your first pair."}
             </p>
           )}
         </section>
