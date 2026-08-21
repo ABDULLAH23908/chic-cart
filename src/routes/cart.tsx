@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 import { useCart } from "@/lib/cart";
 import { formatPKR, whatsappLink } from "@/lib/shop";
@@ -7,12 +7,12 @@ import { formatPKR, whatsappLink } from "@/lib/shop";
 export const Route = createFileRoute("/cart")({
   head: () => ({
     meta: [
-      { title: "Your Bag — Thrift Locker" },
+      { title: "Your Bag — Mubashir Thrift Store" },
       {
         name: "description",
         content: "Review the pairs in your bag and send the order straight to us on WhatsApp.",
       },
-      { property: "og:title", content: "Your Bag — Thrift Locker" },
+      { property: "og:title", content: "Your Bag — Mubashir Thrift Store" },
       {
         property: "og:description",
         content: "Review your pairs and check out over WhatsApp.",
@@ -23,13 +23,11 @@ export const Route = createFileRoute("/cart")({
 });
 
 function CartPage() {
-  const { items, total, setQty, remove, clear } = useCart();
+  const { items, total, remove, clear } = useCart();
 
   const orderMessage =
     "Hi! I'd like to order:\n\n" +
-    items
-      .map((i) => `• ${i.title} (${i.size || "size n/a"}) x${i.qty} — ${formatPKR(i.price * i.qty)}`)
-      .join("\n") +
+    items.map((i) => `• ${i.title} (${i.size || "size n/a"}) — ${formatPKR(i.price)}`).join("\n") +
     `\n\nTotal: ${formatPKR(total)}`;
 
   return (
@@ -64,38 +62,25 @@ function CartPage() {
                   <p className="label-caps text-muted-foreground">
                     {item.brand} · {item.size}
                   </p>
+                  <p className="label-caps mt-1 text-muted-foreground/70">One of one</p>
                   <p className="mt-1 text-sm">{formatPKR(item.price)}</p>
                 </div>
-                <div className="flex shrink-0 items-center gap-2">
-                  <button
-                    onClick={() => setQty(item.id, item.qty - 1)}
-                    className="grid h-8 w-8 place-items-center border border-border"
-                    aria-label="Decrease quantity"
-                  >
-                    <Minus className="h-3 w-3" />
-                  </button>
-                  <span className="w-6 text-center text-sm font-bold">{item.qty}</span>
-                  <button
-                    onClick={() => setQty(item.id, item.qty + 1)}
-                    className="grid h-8 w-8 place-items-center border border-border"
-                    aria-label="Increase quantity"
-                  >
-                    <Plus className="h-3 w-3" />
-                  </button>
-                  <button
-                    onClick={() => remove(item.id)}
-                    className="grid h-8 w-8 place-items-center border border-border text-destructive"
-                    aria-label="Remove item"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </button>
-                </div>
+                <button
+                  onClick={() => remove(item.id)}
+                  className="grid h-9 w-9 shrink-0 place-items-center border border-border text-destructive"
+                  aria-label="Remove item"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
               </li>
             ))}
           </ul>
 
           <div className="mt-8 grid gap-6 sm:grid-cols-[minmax(0,1fr)_320px]">
-            <button onClick={clear} className="label-caps self-start text-muted-foreground underline">
+            <button
+              onClick={clear}
+              className="label-caps self-start text-muted-foreground underline"
+            >
               Clear bag
             </button>
             <div className="border border-border p-6">

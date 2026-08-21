@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { ShoppingBag } from "lucide-react";
+import { Check, ShoppingBag } from "lucide-react";
 
 import { useCart } from "@/lib/cart";
 import { formatPKR, whatsappLink, type Product } from "@/lib/shop";
 
 export function ProductCard({ product }: { product: Product }) {
-  const { add } = useCart();
+  const { add, has } = useCart();
   const image = product.images[0] ?? null;
+  const inBag = has(product.id);
 
   return (
     <article className="group flex flex-col border border-border bg-card">
@@ -57,7 +58,7 @@ export function ProductCard({ product }: { product: Product }) {
 
       <div className="grid gap-px border-t border-border">
         <button
-          disabled={!product.in_stock}
+          disabled={!product.in_stock || inBag}
           onClick={() =>
             add({
               id: product.id,
@@ -70,7 +71,15 @@ export function ProductCard({ product }: { product: Product }) {
           }
           className="label-caps inline-flex items-center justify-center gap-2 bg-foreground px-3 py-3 text-background transition-opacity hover:opacity-85 disabled:opacity-40"
         >
-          <ShoppingBag className="h-3.5 w-3.5" /> Add to bag
+          {inBag ? (
+            <>
+              <Check className="h-3.5 w-3.5" /> In your bag
+            </>
+          ) : (
+            <>
+              <ShoppingBag className="h-3.5 w-3.5" /> Add to bag
+            </>
+          )}
         </button>
         <a
           href={whatsappLink(

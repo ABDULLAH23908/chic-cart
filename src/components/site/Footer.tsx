@@ -1,16 +1,20 @@
 import { Link } from "@tanstack/react-router";
 
 import { STORE_NAME, WHATSAPP_DISPLAY, whatsappLink } from "@/lib/shop";
+import { Logo } from "./Logo";
 
 export function Footer() {
   return (
     <footer className="mt-24 border-t border-border bg-foreground text-background">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4">
         <div>
-          <p className="font-display text-xl font-black tracking-[0.2em] uppercase">{STORE_NAME}</p>
+          <Logo showWordmark={false} />
+          <p className="font-display mt-3 text-lg leading-tight font-black tracking-[0.1em] uppercase">
+            {STORE_NAME}
+          </p>
           <p className="mt-4 max-w-xs text-sm text-background/60">
-            Hand-picked thrifted pairs, graded honestly and priced fairly. One pair, one owner, one
-            price.
+            Hand-picked thrifted pairs, graded honestly and priced fairly. Every listing is a
+            single, one-of-one piece — once it's gone, it's gone.
           </p>
         </div>
 

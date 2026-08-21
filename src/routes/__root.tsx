@@ -82,7 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Thrift Locker — Thrifted Sneakers" },
+      { title: "Mubashir Thrift Store — Thrifted Sneakers" },
       {
         name: "description",
         content: "Hand-picked thrifted sneakers, graded honestly and priced fairly.",

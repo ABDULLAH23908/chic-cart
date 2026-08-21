@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { useCart } from "@/lib/cart";
 import { STORE_NAME, whatsappLink } from "@/lib/shop";
+import { Logo } from "./Logo";
 
 const NAV = [
   { label: "Shop All", to: "/shop", search: undefined },
@@ -27,12 +28,8 @@ export function Header() {
           {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         </button>
 
-        <Link
-          to="/"
-          className="font-display shrink-0 text-lg font-black tracking-[0.2em] uppercase"
-        >
-          {STORE_NAME.split(" ")[0]}
-          <span className="text-background/50">/</span>
+        <Link to="/" className="shrink-0">
+          <Logo />
         </Link>
 
         <nav className="hidden min-w-0 items-center gap-6 md:flex">

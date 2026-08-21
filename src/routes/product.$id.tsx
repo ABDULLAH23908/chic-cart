@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ChevronLeft, ShoppingBag } from "lucide-react";
+import { Check, ChevronLeft, ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -12,13 +12,13 @@ import { formatPKR, whatsappLink, type Product } from "@/lib/shop";
 export const Route = createFileRoute("/product/$id")({
   head: () => ({
     meta: [
-      { title: "Sneaker Detail — Thrift Locker" },
+      { title: "Sneaker Detail — Mubashir Thrift Store" },
       {
         name: "description",
         content:
           "See the exact thrifted pair: real photos with magnifying zoom, size, condition grade and price.",
       },
-      { property: "og:title", content: "Sneaker Detail — Thrift Locker" },
+      { property: "og:title", content: "Sneaker Detail — Mubashir Thrift Store" },
       {
         property: "og:description",
         content: "Real photos with zoom, honest grading and one clear price.",
@@ -30,13 +30,17 @@ export const Route = createFileRoute("/product/$id")({
 
 function ProductPage() {
   const { id } = Route.useParams();
-  const { add } = useCart();
+  const { add, has } = useCart();
   const [index, setIndex] = useState(0);
 
   const { data: product, isLoading } = useQuery({
     queryKey: ["product", id],
     queryFn: async () => {
-      const { data, error } = await supabase.from("products").select("*").eq("id", id).maybeSingle();
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
       if (error) throw error;
       return data as Product | null;
     },
@@ -66,6 +70,7 @@ function ProductPage() {
   }
 
   const images = product.images.length > 0 ? product.images : [];
+  const inBag = has(product.id);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
@@ -124,6 +129,9 @@ function ProductPage() {
             <Spec label="Brand" value={product.brand || "—"} />
             <Spec label="Availability" value={product.in_stock ? "In stock" : "Sold"} />
           </dl>
+          <p className="label-caps mt-3 text-muted-foreground/70">
+            One of one — this exact piece, not a reprint or restock.
+          </p>
 
           {product.description && (
             <p className="mt-6 text-sm leading-relaxed whitespace-pre-line text-muted-foreground">
@@ -133,9 +141,9 @@ function ProductPage() {
 
           <div className="mt-8 grid gap-3">
             <button
-              disabled={!product.in_stock}
+              disabled={!product.in_stock || inBag}
               onClick={() => {
-                add({
+                const added = add({
                   id: product.id,
                   title: product.title,
                   brand: product.brand,
@@ -143,11 +151,19 @@ function ProductPage() {
                   price: product.price,
                   image: images[0] ?? null,
                 });
-                toast.success("Added to your bag");
+                if (added) toast.success("Added to your bag");
               }}
               className="label-caps inline-flex items-center justify-center gap-2 bg-foreground px-6 py-4 text-background transition-opacity hover:opacity-85 disabled:opacity-40"
             >
-              <ShoppingBag className="h-4 w-4" /> Add to bag
+              {inBag ? (
+                <>
+                  <Check className="h-4 w-4" /> In your bag
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="h-4 w-4" /> Add to bag
+                </>
+              )}
             </button>
             <a
               href={whatsappLink(

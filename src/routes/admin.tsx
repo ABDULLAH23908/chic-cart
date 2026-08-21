@@ -20,13 +20,13 @@ const SIGNED_URL_TTL = 60 * 60 * 24 * 365 * 5; // 5 years
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Admin Panel — Thrift Locker" },
+      { title: "Admin Panel — Mubashir Thrift Store" },
       {
         name: "description",
         content: "Add thrifted sneakers with sizes, condition grades, pricing and multiple photos.",
       },
-      { property: "og:title", content: "Admin Panel — Thrift Locker" },
-      { property: "og:description", content: "Manage the Thrift Locker inventory." },
+      { property: "og:title", content: "Admin Panel — Mubashir Thrift Store" },
+      { property: "og:description", content: "Manage the Mubashir Thrift Store inventory." },
       { name: "robots", content: "noindex" },
     ],
   }),

@@ -1,6 +1,7 @@
 export const WHATSAPP_NUMBER = "923335129333";
 export const WHATSAPP_DISPLAY = "+92 333 5129333";
-export const STORE_NAME = "THRIFT LOCKER";
+export const STORE_NAME = "MUBASHIR THRIFT STORE";
+export const STORE_SHORT_NAME = "MTS";
 
 export const CATEGORIES = ["men", "women", "kids"] as const;
 export const CONDITIONS = ["Premium+", "Premium", "Excellence", "Very Good"] as const;

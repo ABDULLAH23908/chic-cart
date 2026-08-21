@@ -7,16 +7,17 @@ export type CartItem = {
   size: string;
   price: number;
   image: string | null;
-  qty: number;
 };
 
 type CartContextValue = {
   items: CartItem[];
   count: number;
   total: number;
-  add: (item: Omit<CartItem, "qty">) => void;
+  /** Adds the item. Returns false (and does nothing) if it's already in the bag —
+   *  every listing is a single physical piece, so it can only be added once. */
+  add: (item: CartItem) => boolean;
+  has: (id: string) => boolean;
   remove: (id: string) => void;
-  setQty: (id: string, qty: number) => void;
   clear: () => void;
 };
 
@@ -29,7 +30,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) setItems(JSON.parse(raw) as CartItem[]);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as (CartItem & { qty?: number })[];
+      // Drop any leftover "qty" from older carts saved before single-unit items.
+      setItems(parsed.map(({ qty: _qty, ...item }) => item));
     } catch {
       /* ignore */
     }
@@ -43,22 +47,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [items]);
 
-  const add = useCallback((item: Omit<CartItem, "qty">) => {
+  const has = useCallback((id: string) => items.some((p) => p.id === id), [items]);
+
+  const add = useCallback((item: CartItem) => {
+    let added = true;
     setItems((prev) => {
-      const found = prev.find((p) => p.id === item.id);
-      if (found) return prev.map((p) => (p.id === item.id ? { ...p, qty: p.qty + 1 } : p));
-      return [...prev, { ...item, qty: 1 }];
+      if (prev.some((p) => p.id === item.id)) {
+        added = false;
+        return prev;
+      }
+      return [...prev, item];
     });
+    return added;
   }, []);
 
   const remove = useCallback((id: string) => {
     setItems((prev) => prev.filter((p) => p.id !== id));
-  }, []);
-
-  const setQty = useCallback((id: string, qty: number) => {
-    setItems((prev) =>
-      prev.flatMap((p) => (p.id === id ? (qty <= 0 ? [] : [{ ...p, qty }]) : [p])),
-    );
   }, []);
 
   const clear = useCallback(() => setItems([]), []);
@@ -66,14 +70,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo<CartContextValue>(
     () => ({
       items,
-      count: items.reduce((n, i) => n + i.qty, 0),
-      total: items.reduce((n, i) => n + i.qty * i.price, 0),
+      count: items.length,
+      total: items.reduce((n, i) => n + i.price, 0),
       add,
+      has,
       remove,
-      setQty,
       clear,
     }),
-    [items, add, remove, setQty, clear],
+    [items, add, has, remove, clear],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

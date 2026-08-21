@@ -133,7 +133,7 @@ export function averageRating(reviews: Review[]) {
   return reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
 }
 
-const LOCAL_KEY = "thriftlocker_user_reviews_v1";
+const LOCAL_KEY = "mts_user_reviews_v1";
 
 /** User-submitted reviews are stored locally in the browser (no backend). */
 export function loadUserReviews(): Review[] {
