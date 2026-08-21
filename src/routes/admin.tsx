@@ -6,7 +6,14 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { CATEGORIES, CONDITIONS, formatPKR, type Product } from "@/lib/shop";
+import {
+  CATEGORIES,
+  CONDITIONS,
+  formatPKR,
+  isHiddenSold,
+  soldHoursLeft,
+  type Product,
+} from "@/lib/shop";
 
 const SIGNED_URL_TTL = 60 * 60 * 24 * 365 * 5; // 5 years
 
@@ -120,6 +127,7 @@ function AdminDashboard({ email }: { email: string }) {
   const [form, setForm] = useState<FormState>(EMPTY);
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [tab, setTab] = useState<"all" | "in-stock" | "sold">("all");
 
   const { data: products } = useQuery({
     queryKey: ["admin-products"],
@@ -129,9 +137,19 @@ function AdminDashboard({ email }: { email: string }) {
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data as Product[];
+      return (data as Product[]).sort(
+        (a, b) => Number(a.in_stock === false) - Number(b.in_stock === false),
+      );
     },
   });
+
+  const counts = {
+    inStock: products?.filter((p) => p.in_stock).length ?? 0,
+    sold: products?.filter((p) => !p.in_stock).length ?? 0,
+  };
+  const visible = (products ?? []).filter((p) =>
+    tab === "all" ? true : tab === "in-stock" ? p.in_stock : !p.in_stock,
+  );
 
   const pickFiles = (list: FileList | null) => {
     if (!list) return;
