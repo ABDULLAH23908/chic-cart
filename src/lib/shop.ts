@@ -18,6 +18,7 @@ export type Product = {
   images: string[];
   in_stock: boolean;
   featured: boolean;
+  sold_at: string | null;
   created_at: string;
 };
 
@@ -27,4 +28,26 @@ export function formatPKR(value: number) {
 
 export function whatsappLink(message: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+export const SOLD_VISIBLE_MS = 24 * 60 * 60 * 1000;
+
+/** A sold pair stays listed (at the very end) for 24h, then disappears. */
+export function isHiddenSold(p: Pick<Product, "in_stock" | "sold_at">) {
+  if (p.in_stock) return false;
+  if (!p.sold_at) return false;
+  return Date.now() - new Date(p.sold_at).getTime() > SOLD_VISIBLE_MS;
+}
+
+/** Drops expired sold pairs and pushes remaining sold pairs to the end. */
+export function orderForStorefront<T extends Pick<Product, "in_stock" | "sold_at">>(list: T[]) {
+  return list
+    .filter((p) => !isHiddenSold(p))
+    .sort((a, b) => Number(a.in_stock === false) - Number(b.in_stock === false));
+}
+
+export function soldHoursLeft(sold_at: string | null) {
+  if (!sold_at) return 0;
+  const left = SOLD_VISIBLE_MS - (Date.now() - new Date(sold_at).getTime());
+  return Math.max(0, Math.ceil(left / (60 * 60 * 1000)));
 }
