@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 
 import heroImage from "@/assets/hero-sneakers.jpg";
 import { ProductCard } from "@/components/site/ProductCard";
+import { ReviewsSection } from "@/components/site/ReviewsSection";
 import { supabase } from "@/integrations/supabase/client";
 import {
   CATEGORIES,
@@ -154,6 +155,8 @@ function Home() {
           </div>
         </div>
       </section>
+
+      <ReviewsSection />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <div className="grid gap-6 border border-border p-8 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
