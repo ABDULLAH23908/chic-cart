@@ -13,15 +13,15 @@ export function Logo({
   className?: string;
 }) {
   return (
-    <span className={`inline-flex shrink-0 items-start gap-2.5 ${className}`}>
+    <span className={`inline-flex shrink-0 items-center gap-2.5 ${className}`}>
       <img
         src={bearAsset.url}
         alt=""
         aria-hidden="true"
-        className="h-9 w-11 shrink-0 translate-y-0.5 object-contain object-top invert"
+        className="h-9 w-11 shrink-0 object-contain object-[50%_30%] invert"
       />
       {showWordmark && (
-        <span className="font-display hidden text-sm leading-none font-black tracking-[0.18em] uppercase pt-0.5 sm:inline">
+        <span className="font-display hidden text-sm leading-none font-black tracking-[0.18em] uppercase sm:inline">
           {STORE_NAME}
         </span>
       )}
