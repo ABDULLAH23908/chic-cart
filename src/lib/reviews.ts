@@ -14,8 +14,89 @@ export type Review = {
   isUserSubmitted?: boolean;
 };
 
-/** Seed reviews cleared—now starting with 0 reviews until added via UI or database. */
-export const SEED_REVIEWS: Review[] = [];
+/** Real reviews pulled from Google Business Profile. */
+export const SEED_REVIEWS: Review[] = [
+  {
+    id: "g1",
+    author: "Usman Saboor",
+    authorMeta: "Local Guide · 13 reviews · 57 photos",
+    rating: 5,
+    body: "Amazing thrift store! Rex has all the top clothing brands, especially in sportswear. Super impressed with the selection and prices!",
+    tag: "General",
+    timeLabel: "a year ago",
+    sortDate: "2025-08-01",
+  },
+  {
+    id: "g2",
+    author: "Muhammad Yasir",
+    authorMeta: "Local Guide · 129 reviews · 7 photos",
+    rating: 5,
+    body: "Imported cloth store in Phase 7 Bahria Town Rawalpindi, sports wear to casual dressing and Jackets. Adidas, Puma, Zara brands under one roof. Very Nice",
+    tag: "Jackets",
+    timeLabel: "10 months ago",
+    sortDate: "2025-10-15",
+  },
+  {
+    id: "g3",
+    author: "Yasir Daud",
+    authorMeta: "10 reviews",
+    rating: 5,
+    body: "Great store u can get nice stuff in shorts and Jeans and T Shirts also regular shirts. Price is really reasonable and great management. Highly recommended 👌",
+    tag: "General",
+    timeLabel: "a year ago",
+    sortDate: "2025-07-20",
+  },
+  {
+    id: "g4",
+    author: "SANA SAEED",
+    authorMeta: "2 reviews",
+    rating: 5,
+    body: "I'm obsessed with this brand! Their clothes are stylish, comfortable, and affordable. I've already recommended them to all my friends. The fabric is breathable, and the design is stunning.",
+    tag: "General",
+    timeLabel: "a year ago",
+    sortDate: "2025-07-10",
+  },
+  {
+    id: "g5",
+    author: "Wajahat Anjum",
+    authorMeta: "3 reviews · 1 photo",
+    rating: 5,
+    body: "Prices are super affordable with top notch quality branded cloths. U can find T shirts, casual shirts, jeans trousers etc. Highly recommended",
+    tag: "General",
+    timeLabel: "a year ago",
+    sortDate: "2025-07-01",
+  },
+  {
+    id: "g6",
+    author: "adeel malik",
+    authorMeta: "1 review",
+    rating: 5,
+    body: "The store has almost all well known 100% original brands at unbelievable reasonable prices. Must visit",
+    tag: "General",
+    timeLabel: "a year ago",
+    sortDate: "2025-06-20",
+  },
+  {
+    id: "g7",
+    author: "Ali Mir",
+    authorMeta: "4 reviews",
+    rating: 5,
+    body: "Its great and good quality.kind and humble staff.and you will get best things in reasonable price.",
+    tag: "General",
+    timeLabel: "a year ago",
+    sortDate: "2025-06-10",
+  },
+  {
+    id: "g8",
+    author: "mubasher hussain",
+    authorMeta: "1 review",
+    rating: 5,
+    body: "",
+    tag: "General",
+    timeLabel: "a year ago",
+    sortDate: "2025-06-01",
+  },
+];
 
 export type ReviewFilter = "All" | "Jackets";
 export type ReviewSort = "relevant" | "newest" | "highest" | "lowest";
