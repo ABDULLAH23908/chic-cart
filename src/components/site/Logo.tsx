@@ -18,10 +18,10 @@ export function Logo({
         src={bearAsset.url}
         alt=""
         aria-hidden="true"
-        className="h-9 w-11 shrink-0 object-contain object-[50%_30%] invert"
+        className="h-9 w-11 shrink-0 object-contain invert"
       />
       {showWordmark && (
-        <span className="font-display hidden text-sm leading-none font-black tracking-[0.18em] uppercase sm:inline">
+        <span className="font-display hidden text-sm font-black tracking-[0.18em] uppercase sm:inline">
           {STORE_NAME}
         </span>
       )}
