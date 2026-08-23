@@ -359,12 +359,13 @@ function WriteReviewDialog({
             />
           </div>
 
-          <Button onClick={handleSubmit} className="label-caps mt-2">
-            Submit review
+          <Button onClick={handleSubmit} disabled={saving} className="label-caps mt-2">
+            {saving ? "Submitting..." : "Submit review"}
           </Button>
           <p className="text-xs text-muted-foreground">
-            Your review is saved on this device and shown alongside our Google reviews.
+            Your review is published for everyone and shown alongside our Google reviews.
           </p>
+
         </div>
       </DialogContent>
     </Dialog>
