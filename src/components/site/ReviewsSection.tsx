@@ -217,25 +217,29 @@ function WriteReviewDialog({
     reader.readAsDataURL(file);
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!name.trim() || !body.trim()) {
       toast.error("Please add your name and a short review");
       return;
     }
-    onSubmit({
-      id: `user-${Date.now()}`,
-      author: name.trim(),
-      authorMeta: "1 review",
-      rating: rating as Review["rating"],
-      body: body.trim(),
-      tag,
-      timeLabel: "Just now",
-      sortDate: new Date().toISOString(),
-      photo,
-      isUserSubmitted: true,
-    });
-    reset();
+    setSaving(true);
+    try {
+      const saved = await submitUserReview({
+        author: name.trim(),
+        rating,
+        body: body.trim(),
+        tag,
+        photo,
+      });
+      onSubmitted(saved);
+      reset();
+    } catch {
+      toast.error("Could not save your review. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   }
+
 
   return (
     <Dialog
