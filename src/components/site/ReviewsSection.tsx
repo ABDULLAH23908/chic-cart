@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Camera, Star, X } from "lucide-react";
 import { toast } from "sonner";
 
@@ -16,14 +16,15 @@ import { Input } from "@/components/ui/input";
 import {
   SEED_REVIEWS,
   averageRating,
+  fetchUserReviews,
   filterReviews,
-  loadUserReviews,
-  saveUserReview,
   sortReviews,
+  submitUserReview,
   type Review,
   type ReviewFilter,
   type ReviewSort,
 } from "@/lib/reviews";
+
 
 const FILTERS: ReviewFilter[] = ["All", "Jackets"];
 const SORTS: { value: ReviewSort; label: string }[] = [
