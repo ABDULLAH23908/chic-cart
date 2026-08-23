@@ -76,7 +76,18 @@ export function Footer() {
                 WhatsApp {WHATSAPP_DISPLAY}
               </a>
             </li>
+            <li>
+              <a
+                href={STORE_MAPS_LINK}
+                target="_blank"
+                rel="noreferrer"
+                className="text-background/70 hover:underline"
+              >
+                {STORE_ADDRESS}
+              </a>
+            </li>
             <li className="text-background/70">Open daily · closes 8:00 PM</li>
+
             <li>
               <Link to="/admin" className="text-background/50 hover:underline">
                 Admin panel
