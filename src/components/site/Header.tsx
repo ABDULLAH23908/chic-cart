@@ -1,3 +1,5 @@
+// src/components/site/Header.tsx
+
 import { Link } from "@tanstack/react-router";
 import { Menu, ShoppingBag, X } from "lucide-react";
 import { useState } from "react";
@@ -28,7 +30,7 @@ export function Header() {
           {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         </button>
 
-        <Link to="/" className="shrink-0">
+        <Link to="/" className="inline-flex shrink-0 items-center">
           <Logo />
         </Link>
 
@@ -38,7 +40,7 @@ export function Header() {
               key={item.label}
               to={item.to}
               search={item.search as never}
-              className="label-caps text-background/70 transition-colors hover:text-background"
+              className="label-caps inline-flex items-center text-background/70 transition-colors hover:text-background"
             >
               {item.label}
             </Link>
