@@ -19,13 +19,13 @@ export const Route = createFileRoute("/shop")({
   }),
   head: () => ({
     meta: [
-      { title: "Shop All Thrifted Sneakers — Mubashir Thrift Store" },
+      { title: "Shop All Thrifted Sneakers — REX Thrift Store" },
       {
         name: "description",
         content:
           "Browse every hand-picked thrifted sneaker in stock: filter by men, women, kids, condition grade and price.",
       },
-      { property: "og:title", content: "Shop All Thrifted Sneakers — Mubashir Thrift Store" },
+      { property: "og:title", content: "Shop All Thrifted Sneakers — REX Thrift Store" },
       {
         property: "og:description",
         content: "Filter thrifted sneakers by category, grade and price. One pair, one price.",

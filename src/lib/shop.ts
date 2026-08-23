@@ -1,7 +1,14 @@
 export const WHATSAPP_NUMBER = "923335129333";
 export const WHATSAPP_DISPLAY = "+92 333 5129333";
-export const STORE_NAME = "MUBASHIR THRIFT STORE";
-export const STORE_SHORT_NAME = "MTS";
+export const STORE_NAME = "REX THRIFT STORE";
+export const STORE_SHORT_NAME = "REX";
+export const STORE_TAGLINE = "Shop Smart · Shop Rex";
+export const STORE_ADDRESS = "Shop LG 56, Emirates Plaza, Bahria Town Phase 7, Rawalpindi, Pakistan";
+export const STORE_MAPS_LINK =
+  "https://www.google.com/maps/search/?api=1&query=" +
+  encodeURIComponent("REX Thrift Store Emirates Plaza Bahria Town Phase 7 Rawalpindi");
+export const STORE_RATING = "5.0";
+
 
 export const CATEGORIES = ["men", "women", "kids"] as const;
 export const CONDITIONS = ["Premium+", "Premium", "Excellence", "Very Good"] as const;
