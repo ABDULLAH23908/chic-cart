@@ -134,3 +134,9 @@
     linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
   background-size: 48px 48px;
 }
+
+/* Lovable injects this badge outside our source at serve-time; this repo
+   has no other reference to it, so hide it here instead. */
+#lovable-badge {
+  display: none !important;
+}
