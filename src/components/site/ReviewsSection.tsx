@@ -178,12 +178,14 @@ export function ReviewsSection() {
 function WriteReviewDialog({
   open,
   onOpenChange,
-  onSubmit,
+  onSubmitted,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (review: Review) => void;
+  onSubmitted: (review: Review) => void;
 }) {
+  const [saving, setSaving] = useState(false);
+
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
   const [body, setBody] = useState("");
