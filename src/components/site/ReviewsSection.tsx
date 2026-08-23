@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Camera, Star, X } from "lucide-react";
 import { toast } from "sonner";
 
@@ -16,14 +16,15 @@ import { Input } from "@/components/ui/input";
 import {
   SEED_REVIEWS,
   averageRating,
+  fetchUserReviews,
   filterReviews,
-  loadUserReviews,
-  saveUserReview,
   sortReviews,
+  submitUserReview,
   type Review,
   type ReviewFilter,
   type ReviewSort,
 } from "@/lib/reviews";
+
 
 const FILTERS: ReviewFilter[] = ["All", "Jackets"];
 const SORTS: { value: ReviewSort; label: string }[] = [
@@ -56,10 +57,14 @@ function initials(name: string) {
 }
 
 export function ReviewsSection() {
-  const [userReviews, setUserReviews] = useState<Review[]>(() => loadUserReviews());
+  const [userReviews, setUserReviews] = useState<Review[]>([]);
   const [filter, setFilter] = useState<ReviewFilter>("All");
   const [sort, setSort] = useState<ReviewSort>("relevant");
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    void fetchUserReviews().then(setUserReviews);
+  }, []);
 
   const allReviews = useMemo(() => [...userReviews, ...SEED_REVIEWS], [userReviews]);
   const visible = useMemo(
@@ -85,13 +90,13 @@ export function ReviewsSection() {
         <WriteReviewDialog
           open={open}
           onOpenChange={setOpen}
-          onSubmit={(review) => {
-            saveUserReview(review);
+          onSubmitted={(review) => {
             setUserReviews((prev) => [review, ...prev]);
             setOpen(false);
             toast.success("Thanks for your review!");
           }}
         />
+
       </div>
 
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
@@ -173,12 +178,14 @@ export function ReviewsSection() {
 function WriteReviewDialog({
   open,
   onOpenChange,
-  onSubmit,
+  onSubmitted,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (review: Review) => void;
+  onSubmitted: (review: Review) => void;
 }) {
+  const [saving, setSaving] = useState(false);
+
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
   const [body, setBody] = useState("");
@@ -210,25 +217,29 @@ function WriteReviewDialog({
     reader.readAsDataURL(file);
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!name.trim() || !body.trim()) {
       toast.error("Please add your name and a short review");
       return;
     }
-    onSubmit({
-      id: `user-${Date.now()}`,
-      author: name.trim(),
-      authorMeta: "1 review",
-      rating: rating as Review["rating"],
-      body: body.trim(),
-      tag,
-      timeLabel: "Just now",
-      sortDate: new Date().toISOString(),
-      photo,
-      isUserSubmitted: true,
-    });
-    reset();
+    setSaving(true);
+    try {
+      const saved = await submitUserReview({
+        author: name.trim(),
+        rating,
+        body: body.trim(),
+        tag,
+        photo,
+      });
+      onSubmitted(saved);
+      reset();
+    } catch {
+      toast.error("Could not save your review. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   }
+
 
   return (
     <Dialog
@@ -348,12 +359,13 @@ function WriteReviewDialog({
             />
           </div>
 
-          <Button onClick={handleSubmit} className="label-caps mt-2">
-            Submit review
+          <Button onClick={handleSubmit} disabled={saving} className="label-caps mt-2">
+            {saving ? "Submitting..." : "Submit review"}
           </Button>
           <p className="text-xs text-muted-foreground">
-            Your review is saved on this device and shown alongside our Google reviews.
+            Your review is published for everyone and shown alongside our Google reviews.
           </p>
+
         </div>
       </DialogContent>
     </Dialog>

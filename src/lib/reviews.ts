@@ -133,22 +133,73 @@ export function averageRating(reviews: Review[]) {
   return reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
 }
 
-const LOCAL_KEY = "mts_user_reviews_v1";
+import { supabase } from "@/integrations/supabase/client";
 
-/** User-submitted reviews are stored locally in the browser (no backend). */
-export function loadUserReviews(): Review[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(LOCAL_KEY);
-    return raw ? (JSON.parse(raw) as Review[]) : [];
-  } catch {
-    return [];
-  }
+function timeAgo(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins} minute${mins === 1 ? "" : "s"} ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days} day${days === 1 ? "" : "s"} ago`;
+  const months = Math.floor(days / 30);
+  if (months < 12) return `${months} month${months === 1 ? "" : "s"} ago`;
+  return "a year ago";
 }
 
-export function saveUserReview(review: Review) {
-  if (typeof window === "undefined") return;
-  const existing = loadUserReviews();
-  const next = [review, ...existing];
-  window.localStorage.setItem(LOCAL_KEY, JSON.stringify(next));
+/** User-submitted reviews now live in the backend. */
+export async function fetchUserReviews(): Promise<Review[]> {
+  const { data, error } = await supabase
+    .from("reviews")
+    .select("id, author, rating, body, tag, photo, created_at")
+    .order("created_at", { ascending: false });
+  if (error || !data) return [];
+  return data.map((r) => ({
+    id: r.id,
+    author: r.author,
+    authorMeta: "1 review",
+    rating: r.rating as Review["rating"],
+    body: r.body,
+    tag: (r.tag === "Jackets" ? "Jackets" : "General") as Review["tag"],
+    timeLabel: timeAgo(r.created_at),
+    sortDate: r.created_at,
+    photo: r.photo,
+    isUserSubmitted: true,
+  }));
 }
+
+export async function submitUserReview(input: {
+  author: string;
+  rating: number;
+  body: string;
+  tag: "Jackets" | "General";
+  photo?: string | null;
+}): Promise<Review> {
+  const { data, error } = await supabase
+    .from("reviews")
+    .insert({
+      author: input.author,
+      rating: input.rating,
+      body: input.body,
+      tag: input.tag,
+      photo: input.photo ?? null,
+    })
+    .select("id, author, rating, body, tag, photo, created_at")
+    .single();
+  if (error || !data) throw error ?? new Error("Could not save review");
+  return {
+    id: data.id,
+    author: data.author,
+    authorMeta: "1 review",
+    rating: data.rating as Review["rating"],
+    body: data.body,
+    tag: (data.tag === "Jackets" ? "Jackets" : "General") as Review["tag"],
+    timeLabel: "Just now",
+    sortDate: data.created_at,
+    photo: data.photo,
+    isUserSubmitted: true,
+  };
+}
+
