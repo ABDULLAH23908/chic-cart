@@ -1,6 +1,13 @@
 import { Link } from "@tanstack/react-router";
 
-import { STORE_NAME, WHATSAPP_DISPLAY, whatsappLink } from "@/lib/shop";
+import {
+  STORE_ADDRESS,
+  STORE_MAPS_LINK,
+  STORE_NAME,
+  STORE_TAGLINE,
+  WHATSAPP_DISPLAY,
+  whatsappLink,
+} from "@/lib/shop";
 import { Logo } from "./Logo";
 
 export function Footer() {
@@ -12,11 +19,13 @@ export function Footer() {
           <p className="font-display mt-3 text-lg leading-tight font-black tracking-[0.1em] uppercase">
             {STORE_NAME}
           </p>
+          <p className="label-caps mt-1 text-background/50">{STORE_TAGLINE}</p>
           <p className="mt-4 max-w-xs text-sm text-background/60">
-            Hand-picked thrifted pairs, graded honestly and priced fairly. Every listing is a
-            single, one-of-one piece — once it's gone, it's gone.
+            Imported branded thrift — sportswear, jackets, casual shirts, jeans and one-of-one
+            pieces. Adidas, Puma, Nike and Zara under one roof.
           </p>
         </div>
+
 
         <div>
           <p className="label-caps text-background/50">Shop</p>
@@ -67,7 +76,18 @@ export function Footer() {
                 WhatsApp {WHATSAPP_DISPLAY}
               </a>
             </li>
+            <li>
+              <a
+                href={STORE_MAPS_LINK}
+                target="_blank"
+                rel="noreferrer"
+                className="text-background/70 hover:underline"
+              >
+                {STORE_ADDRESS}
+              </a>
+            </li>
             <li className="text-background/70">Open daily · closes 8:00 PM</li>
+
             <li>
               <Link to="/admin" className="text-background/50 hover:underline">
                 Admin panel

@@ -18,13 +18,13 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Mubashir Thrift Store — Thrifted Sneakers, Graded Honestly" },
+      { title: "REX Thrift Store — Branded Thrift Clothing in Rawalpindi" },
       {
         name: "description",
         content:
           "Hand-picked thrifted sneakers for men, women and kids. Real photos, honest condition grades, one clear price. Order on WhatsApp.",
       },
-      { property: "og:title", content: "Mubashir Thrift Store — Thrifted Sneakers, Graded Honestly" },
+      { property: "og:title", content: "REX Thrift Store — Branded Thrift Clothing in Rawalpindi" },
       {
         property: "og:description",
         content:

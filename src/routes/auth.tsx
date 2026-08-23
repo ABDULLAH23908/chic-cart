@@ -7,13 +7,13 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Store Sign In — Mubashir Thrift Store" },
+      { title: "Store Sign In — REX Thrift Store" },
       {
         name: "description",
-        content: "Sign in to the Mubashir Thrift Store admin panel to add and manage sneaker listings.",
+        content: "Sign in to the REX Thrift Store admin panel to add and manage sneaker listings.",
       },
-      { property: "og:title", content: "Store Sign In — Mubashir Thrift Store" },
-      { property: "og:description", content: "Admin access for Mubashir Thrift Store staff." },
+      { property: "og:title", content: "Store Sign In — REX Thrift Store" },
+      { property: "og:description", content: "Admin access for REX Thrift Store staff." },
     ],
   }),
   component: AuthPage,
