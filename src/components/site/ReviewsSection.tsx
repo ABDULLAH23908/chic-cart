@@ -57,10 +57,14 @@ function initials(name: string) {
 }
 
 export function ReviewsSection() {
-  const [userReviews, setUserReviews] = useState<Review[]>(() => loadUserReviews());
+  const [userReviews, setUserReviews] = useState<Review[]>([]);
   const [filter, setFilter] = useState<ReviewFilter>("All");
   const [sort, setSort] = useState<ReviewSort>("relevant");
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    void fetchUserReviews().then(setUserReviews);
+  }, []);
 
   const allReviews = useMemo(() => [...userReviews, ...SEED_REVIEWS], [userReviews]);
   const visible = useMemo(
@@ -86,13 +90,13 @@ export function ReviewsSection() {
         <WriteReviewDialog
           open={open}
           onOpenChange={setOpen}
-          onSubmit={(review) => {
-            saveUserReview(review);
+          onSubmitted={(review) => {
             setUserReviews((prev) => [review, ...prev]);
             setOpen(false);
             toast.success("Thanks for your review!");
           }}
         />
+
       </div>
 
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
