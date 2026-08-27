@@ -58,14 +58,30 @@ export function Header() {
         </nav>
 
         <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
-          <a
-            href={whatsappLink("Hi! I want to order from " + STORE_NAME)}
-            target="_blank"
-            rel="noreferrer"
-            className="label-caps hidden bg-whatsapp px-4 py-3 text-white transition-opacity hover:opacity-90 sm:inline-block"
+          <form onSubmit={submitSearch} className="hidden items-center md:flex">
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search..."
+              className="h-10 w-40 border border-background/25 bg-transparent px-3 text-sm text-background placeholder:text-background/40 focus:border-background focus:outline-none lg:w-56"
+            />
+            <button
+              type="submit"
+              className="inline-flex h-10 w-10 items-center justify-center border border-background/25 text-background transition-colors hover:bg-background hover:text-foreground"
+              aria-label="Search"
+            >
+              <Search className="h-4 w-4" />
+            </button>
+          </form>
+
+          <button
+            onClick={() => setSearchOpen((v) => !v)}
+            className="inline-flex h-10 w-10 items-center justify-center border border-background/25 md:hidden"
+            aria-label="Toggle search"
           >
-            Order on WhatsApp
-          </a>
+            {searchOpen ? <X className="h-4 w-4" /> : <Search className="h-4 w-4" />}
+          </button>
+
           <Link
             to="/cart"
             className="relative inline-flex h-10 w-10 items-center justify-center border border-background/25 transition-colors hover:bg-background hover:text-foreground"
@@ -80,6 +96,26 @@ export function Header() {
           </Link>
         </div>
       </div>
+
+      {searchOpen && (
+        <form onSubmit={submitSearch} className="border-t border-background/15 px-4 py-3 md:hidden">
+          <div className="flex gap-2">
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search products..."
+              className="h-10 flex-1 border border-background/25 bg-transparent px-3 text-sm text-background placeholder:text-background/40 focus:border-background focus:outline-none"
+            />
+            <button
+              type="submit"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center border border-background/25 text-background transition-colors hover:bg-background hover:text-foreground"
+              aria-label="Search"
+            >
+              <Search className="h-4 w-4" />
+            </button>
+          </div>
+        </form>
+      )}
 
       {open && (
         <nav className="border-t border-background/15 md:hidden">
