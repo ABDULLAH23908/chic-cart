@@ -21,7 +21,7 @@ export const SEED_REVIEWS: Review[] = [
     author: "Usman Saboor",
     authorMeta: "Local Guide · 13 reviews · 57 photos",
     rating: 5,
-    body: "Amazing thrift store! Rex has all the top clothing brands, especially in sportswear. Super impressed with the selection and prices!",
+    body: "Amazing thrift store! Prime has all the top clothing brands, especially in sportswear. Super impressed with the selection and prices!",
     tag: "General",
     timeLabel: "a year ago",
     sortDate: "2025-08-01",

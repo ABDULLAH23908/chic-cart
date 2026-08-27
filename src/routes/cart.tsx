@@ -7,12 +7,12 @@ import { formatPKR, whatsappLink } from "@/lib/shop";
 export const Route = createFileRoute("/cart")({
   head: () => ({
     meta: [
-      { title: "Your Bag — REX Thrift Store" },
+      { title: "Your Bag — Prime Shoes" },
       {
         name: "description",
         content: "Review the pairs in your bag and send the order straight to us on WhatsApp.",
       },
-      { property: "og:title", content: "Your Bag — REX Thrift Store" },
+      { property: "og:title", content: "Your Bag — Prime Shoes" },
       {
         property: "og:description",
         content: "Review your pairs and check out over WhatsApp.",

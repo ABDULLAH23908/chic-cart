@@ -12,13 +12,13 @@ import { formatPKR, whatsappLink, type Product } from "@/lib/shop";
 export const Route = createFileRoute("/product/$id")({
   head: () => ({
     meta: [
-      { title: "Sneaker Detail — REX Thrift Store" },
+      { title: "Sneaker Detail — Prime Shoes" },
       {
         name: "description",
         content:
           "See the exact thrifted pair: real photos with magnifying zoom, size, condition grade and price.",
       },
-      { property: "og:title", content: "Sneaker Detail — REX Thrift Store" },
+      { property: "og:title", content: "Sneaker Detail — Prime Shoes" },
       {
         property: "og:description",
         content: "Real photos with zoom, honest grading and one clear price.",
