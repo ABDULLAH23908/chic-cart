@@ -1,11 +1,10 @@
 // src/components/site/Header.tsx
 
-import { Link } from "@tanstack/react-router";
-import { Menu, ShoppingBag, X } from "lucide-react";
-import { useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Menu, Search, ShoppingBag, X } from "lucide-react";
+import { useState, type FormEvent } from "react";
 
 import { useCart } from "@/lib/cart";
-import { STORE_NAME, whatsappLink } from "@/lib/shop";
 import { Logo } from "./Logo";
 
 const NAV = [
