@@ -17,6 +17,17 @@ const NAV = [
 export function Header() {
   const { count } = useCart();
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+
+  const submitSearch = (e?: FormEvent) => {
+    e?.preventDefault();
+    const q = query.trim();
+    if (!q) return;
+    navigate({ to: "/shop", search: { q } });
+    setSearchOpen(false);
+  };
 
   return (
     <header className="sticky top-0 z-40 border-b border-foreground/15 bg-foreground text-background">
