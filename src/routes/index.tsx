@@ -8,7 +8,6 @@ import { ReviewsSection } from "@/components/site/ReviewsSection";
 import { supabase } from "@/integrations/supabase/client";
 import {
   CATEGORIES,
-  CONDITIONS,
   STORE_NAME,
   orderForStorefront,
   whatsappLink,
@@ -43,42 +42,49 @@ function Home() {
         .from("products")
         .select("*")
         .order("created_at", { ascending: false })
-        .limit(12);
+        .limit(24);
       if (error) throw error;
-      return orderForStorefront(data as Product[]).slice(0, 6);
+      return orderForStorefront(data as Product[]);
     },
   });
 
+  const all = products ?? [];
+  const trending = all.filter((p) => p.featured).slice(0, 4);
+  const trendingRow = (trending.length > 0 ? trending : all).slice(0, 4);
+  const bestSellers = all.slice(4, 8);
+  const newArrivals = all.slice(0, 4);
+
   return (
     <div>
+      {/* HERO */}
       <section className="relative overflow-hidden border-b border-border bg-foreground text-background">
         <img
           src={heroImage}
-          alt="Worn vintage sneakers on concrete"
+          alt="Branded thrift clothing rail"
           width={1920}
           height={1088}
           className="absolute inset-0 h-full w-full object-cover opacity-40"
         />
-        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28">
-          <p className="label-caps text-background/60">100+ brands · one thrift stop</p>
-          <h1 className="mt-5 max-w-3xl text-5xl leading-[0.95] font-black uppercase sm:text-7xl">
-            Worn once.
+        <div className="relative mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 sm:py-32">
+          <p className="label-caps text-background/60">{STORE_NAME}</p>
+          <h1 className="mt-5 text-5xl leading-[0.95] font-black uppercase sm:text-7xl">
+            Step into
             <br />
-            Priced right.
+            your style
           </h1>
-          <p className="mt-6 max-w-lg text-sm text-background/70">
-            Every pair at {STORE_NAME} is inspected, graded and photographed by hand. What you see is
-            the exact pair that lands at your door.
-          </p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Link
-              to="/shop"
-              className="label-caps inline-flex items-center gap-2 bg-background px-6 py-4 text-foreground transition-opacity hover:opacity-85"
-            >
-              Shop new arrivals <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            {CATEGORIES.map((c) => (
+              <Link
+                key={c}
+                to="/shop"
+                search={{ category: c }}
+                className="label-caps border border-background/40 px-6 py-4 transition-colors hover:bg-background hover:text-foreground"
+              >
+                Shop {c}
+              </Link>
+            ))}
             <a
-              href={whatsappLink("Hi! I'm looking for a specific pair.")}
+              href={whatsappLink("Hi! I'm looking for a specific piece.")}
               target="_blank"
               rel="noreferrer"
               className="label-caps bg-whatsapp px-6 py-4 text-white transition-opacity hover:opacity-90"
@@ -89,8 +95,13 @@ function Home() {
         </div>
       </section>
 
+      {/* TRENDING NOW */}
+      <ProductRow title="Trending now" items={trendingRow} />
+
+      {/* SHOP BY CATEGORY */}
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
-        <div className="grid gap-px border border-border bg-border sm:grid-cols-3">
+        <h2 className="text-center text-3xl font-black uppercase sm:text-4xl">Shop by category</h2>
+        <div className="mt-8 grid gap-px border border-border bg-border sm:grid-cols-3">
           {CATEGORIES.map((c) => (
             <Link
               key={c}
@@ -105,77 +116,58 @@ function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
-          <h2 className="text-3xl font-black uppercase sm:text-4xl">New arrivals</h2>
-          <Link to="/shop" className="label-caps shrink-0 underline">
-            View all
-          </Link>
-        </div>
+      {/* BEST SELLERS */}
+      <ProductRow title="Best sellers" items={bestSellers.length > 0 ? bestSellers : trendingRow} />
 
-        {products && products.length > 0 ? (
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
-        ) : (
-          <p className="mt-8 border border-dashed border-border py-20 text-center text-sm text-muted-foreground">
-            No pairs listed yet. Add your first product from the admin panel.
-          </p>
-        )}
-      </section>
+      {/* NEW ARRIVALS */}
+      <ProductRow title="New arrivals" items={newArrivals} />
 
+      {/* WHY SHOP WITH US */}
       <section className="mt-20 border-y border-border bg-secondary">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-          <h2 className="text-3xl font-black uppercase">Shop by condition</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            We grade every pair the same way, so you always know what you're paying for.
-          </p>
-          <div className="mt-8 grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
-            {CONDITIONS.map((c) => (
-              <Link
-                key={c}
-                to="/shop"
-                search={{ condition: c }}
-                className="bg-background p-6 transition-colors hover:bg-foreground hover:text-background"
-              >
-                <p className="label-caps">{c}</p>
-                <p className="mt-3 text-xs opacity-70">
-                  {c === "Premium+"
-                    ? "Looks brand new. Barely worn, no visible flaws."
-                    : c === "Premium"
-                      ? "Light signs of wear, crisp shape and clean sole."
-                      : c === "Excellence"
-                        ? "Honest wear with plenty of life left in them."
-                        : "Well loved pairs at the friendliest prices."}
-                </p>
-              </Link>
+          <h2 className="text-center text-3xl font-black uppercase">Why shop with us?</h2>
+          <div className="mt-8 grid gap-px bg-border sm:grid-cols-3">
+            {[
+              { t: "Delivery", d: "Country-wide delivery, packed and shipped within 24 hours." },
+              { t: "COD", d: "Cash on delivery available — pay when your parcel reaches you." },
+              { t: "Exchanges", d: "Size or fit off? Message us on WhatsApp and we'll sort it." },
+            ].map((f) => (
+              <div key={f.t} className="bg-background p-8">
+                <p className="label-caps">{f.t}</p>
+                <p className="mt-3 text-sm text-muted-foreground">{f.d}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* REVIEWS */}
       <ReviewsSection />
-
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-        <div className="grid gap-6 border border-border p-8 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
-          <div className="min-w-0">
-            <h2 className="text-2xl font-black uppercase">Looking for a specific pair?</h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Message us your size and budget — we source it from the next bale.
-            </p>
-          </div>
-          <a
-            href={whatsappLink("Hi! I'm looking for size ___ and my budget is ___")}
-            target="_blank"
-            rel="noreferrer"
-            className="label-caps shrink-0 bg-whatsapp px-6 py-4 text-center text-white"
-          >
-            Chat with us
-          </a>
-        </div>
-      </section>
     </div>
+  );
+}
+
+function ProductRow({ title, items }: { title: string; items: Product[] }) {
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
+        <h2 className="text-3xl font-black uppercase sm:text-4xl">{title}</h2>
+        <Link to="/shop" className="label-caps shrink-0 underline">
+          View all
+        </Link>
+      </div>
+
+      {items.length > 0 ? (
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {items.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+      ) : (
+        <p className="mt-8 border border-dashed border-border py-16 text-center text-sm text-muted-foreground">
+          Nothing listed here yet.
+        </p>
+      )}
+    </section>
   );
 }
