@@ -1,9 +1,9 @@
-import bearAsset from "@/assets/rex-bear.png.asset.json";
+import markAsset from "@/assets/prime-mark.png.asset.json";
 import { STORE_NAME } from "@/lib/shop";
 
 /**
- * REX bear mark. Sits on the dark header/footer background (bg-foreground),
- * so the black silhouette is inverted to read white.
+ * Prime triangle mark. Sits on the dark header/footer background
+ * (bg-foreground), so the black mark is inverted to read white.
  */
 export function Logo({
   showWordmark = true,
@@ -15,13 +15,13 @@ export function Logo({
   return (
     <span className={`inline-flex shrink-0 items-center gap-2.5 ${className}`}>
       <img
-        src={bearAsset.url}
+        src={markAsset.url}
         alt=""
         aria-hidden="true"
-        className="h-9 w-11 shrink-0 object-contain invert"
+        className="h-8 w-10 shrink-0 object-contain invert"
       />
       {showWordmark && (
-        <span className="font-display hidden text-sm font-black tracking-[0.18em] uppercase sm:inline">
+        <span className="font-display hidden text-sm font-black tracking-[0.28em] uppercase sm:inline">
           {STORE_NAME}
         </span>
       )}
