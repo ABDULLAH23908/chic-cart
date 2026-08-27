@@ -8,7 +8,6 @@ import { ReviewsSection } from "@/components/site/ReviewsSection";
 import { supabase } from "@/integrations/supabase/client";
 import {
   CATEGORIES,
-  CONDITIONS,
   STORE_NAME,
   orderForStorefront,
   whatsappLink,
