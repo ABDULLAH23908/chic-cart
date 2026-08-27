@@ -9,6 +9,7 @@ type ShopSearch = {
   category?: string | undefined;
   condition?: string | undefined;
   sort?: string | undefined;
+  q?: string | undefined;
 };
 
 export const Route = createFileRoute("/shop")({
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/shop")({
     category: typeof search["category"] === "string" ? search["category"] : undefined,
     condition: typeof search["condition"] === "string" ? search["condition"] : undefined,
     sort: typeof search["sort"] === "string" ? search["sort"] : undefined,
+    q: typeof search["q"] === "string" ? search["q"] : undefined,
   }),
   head: () => ({
     meta: [
