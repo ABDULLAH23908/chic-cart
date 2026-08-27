@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { ZoomImage } from "@/components/site/ZoomImage";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/lib/cart";
-import { formatPKR, whatsappLink, type Product } from "@/lib/shop";
+import { formatPKR, type Product } from "@/lib/shop";
 
 export const Route = createFileRoute("/product/$id")({
   head: () => ({

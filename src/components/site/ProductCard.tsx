@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Check, ShoppingBag } from "lucide-react";
 
 import { useCart } from "@/lib/cart";
-import { formatPKR, whatsappLink, type Product } from "@/lib/shop";
+import { formatPKR, type Product } from "@/lib/shop";
 
 export function ProductCard({ product }: { product: Product }) {
   const { add, has } = useCart();

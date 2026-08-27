@@ -2,7 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { Trash2 } from "lucide-react";
 
 import { useCart } from "@/lib/cart";
-import { formatPKR, whatsappLink } from "@/lib/shop";
+import { formatPKR } from "@/lib/shop";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
