@@ -26,7 +26,6 @@ export function Footer() {
           </p>
         </div>
 
-
         <div>
           <p className="label-caps text-background/50">Shop</p>
           <ul className="mt-4 space-y-2 text-sm">
@@ -36,17 +35,29 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/shop" search={{ category: "men" }} className="hover:underline">
+              <Link 
+                to="/shop" 
+                search={{ category: "men" }} 
+                className="hover:underline"
+              >
                 Men
               </Link>
             </li>
             <li>
-              <Link to="/shop" search={{ category: "women" }} className="hover:underline">
+              <Link 
+                to="/shop" 
+                search={{ category: "women" }} 
+                className="hover:underline"
+              >
                 Women
               </Link>
             </li>
             <li>
-              <Link to="/shop" search={{ category: "kids" }} className="hover:underline">
+              <Link 
+                to="/shop" 
+                search={{ category: "kids" }} 
+                className="hover:underline"
+              >
                 Kids
               </Link>
             </li>
