@@ -7,8 +7,14 @@ import { useState, type FormEvent } from "react";
 import { useCart } from "@/lib/cart";
 import { Logo } from "./Logo";
 
-const NAV = [
-  { label: "Shop All", to: "/shop", search: undefined },
+type NavItem = {
+  label: string;
+  to: "/shop";
+  search?: { category?: string; q?: string };
+};
+
+const NAV: NavItem[] = [
+  { label: "Shop All", to: "/shop" },
   { label: "Men", to: "/shop", search: { category: "men" } },
   { label: "Women", to: "/shop", search: { category: "women" } },
   { label: "Kids", to: "/shop", search: { category: "kids" } },
@@ -49,7 +55,7 @@ export function Header() {
             <Link
               key={item.label}
               to={item.to}
-              search={item.search as never}
+              search={item.search}
               className="label-caps inline-flex items-center text-background/70 transition-colors hover:text-background"
             >
               {item.label}
@@ -123,7 +129,7 @@ export function Header() {
             <Link
               key={item.label}
               to={item.to}
-              search={item.search as never}
+              search={item.search}
               onClick={() => setOpen(false)}
               className="label-caps block border-b border-background/10 px-4 py-4"
             >
