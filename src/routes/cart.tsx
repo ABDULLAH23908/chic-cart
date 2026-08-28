@@ -25,11 +25,6 @@ export const Route = createFileRoute("/cart")({
 function CartPage() {
   const { items, total, remove, clear } = useCart();
 
-  const orderMessage =
-    "Hi! I'd like to order:\n\n" +
-    items.map((i) => `• ${i.title} (${i.size || "size n/a"}) — ${formatPKR(i.price)}`).join("\n") +
-    `\n\nTotal: ${formatPKR(total)}`;
-
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
       <h1 className="text-4xl font-black uppercase">Your bag</h1>

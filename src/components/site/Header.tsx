@@ -10,11 +10,11 @@ import { Logo } from "./Logo";
 type NavItem = {
   label: string;
   to: "/shop";
-  search?: { category?: string; q?: string };
+  search: { category?: string; q?: string };
 };
 
 const NAV: NavItem[] = [
-  { label: "Shop All", to: "/shop" },
+  { label: "Shop All", to: "/shop", search: {} },
   { label: "Men", to: "/shop", search: { category: "men" } },
   { label: "Women", to: "/shop", search: { category: "women" } },
   { label: "Kids", to: "/shop", search: { category: "kids" } },

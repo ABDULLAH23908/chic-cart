@@ -10,7 +10,6 @@ import {
   CATEGORIES,
   STORE_NAME,
   orderForStorefront,
-  whatsappLink,
   type Product,
 } from "@/lib/shop";
 
