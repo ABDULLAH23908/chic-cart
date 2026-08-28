@@ -62,12 +62,11 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="label-caps text-background/50">Grades</p>
+          <p className="label-caps text-background/50">Delivery</p>
           <ul className="mt-4 space-y-2 text-sm text-background/70">
-            <li>Premium+ — looks brand new</li>
-            <li>Premium — light signs of wear</li>
-            <li>Excellence — honest wear, lots left</li>
-            <li>Very Good — well loved, best price</li>
+            <li>Cash on delivery</li>
+            <li>Easy exchanges</li>
+            <li>Nationwide shipping</li>
           </ul>
         </div>
 

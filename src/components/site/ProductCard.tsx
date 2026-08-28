@@ -28,9 +28,11 @@ export function ProductCard({ product }: { product: Product }) {
             No photo
           </span>
         )}
-        <span className="label-caps absolute top-0 left-0 bg-foreground px-2 py-1 text-background">
-          {product.condition}
-        </span>
+        {product.new_arrival && (
+          <span className="label-caps absolute top-0 left-0 bg-foreground px-2 py-1 text-background">
+            New
+          </span>
+        )}
         {!product.in_stock && (
           <span className="label-caps absolute inset-0 grid place-items-center bg-background/80">
             Sold

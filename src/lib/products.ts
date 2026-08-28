@@ -6,18 +6,16 @@
  *
  * Rules:
  *  - category must be one of: men | women | unisex
- *  - condition must be one of: Premium+ | Premium | Excellence | Very Good
  *  - price / original_price are plain numbers in PKR
  *  - images are full https URLs (paste links, or upload photos in the form instead)
  */
-import { CATEGORIES, CONDITIONS } from "./shop";
+import { CATEGORIES } from "./shop";
 
 export type BulkProduct = {
   title: string;
   brand?: string;
   category?: (typeof CATEGORIES)[number];
   size?: string;
-  condition?: (typeof CONDITIONS)[number];
   price: number;
   original_price?: number | null;
   description?: string;
@@ -32,7 +30,6 @@ export const BULK_PRODUCTS: BulkProduct[] = [
   //   brand: "Adidas",
   //   category: "men",
   //   size: "M",
-  //   condition: "Premium",
   //   price: 2500,
   //   original_price: 6000,
   //   description: "Clean three-stripe jacket, no flaws.",
@@ -49,7 +46,6 @@ export function toProductRow(p: BulkProduct) {
     brand: (p.brand ?? "").trim(),
     category: p.category ?? "men",
     size: (p.size ?? "").trim(),
-    condition: p.condition ?? "Premium",
     price: Number(p.price) || 0,
     original_price: p.original_price ?? null,
     description: (p.description ?? "").trim(),

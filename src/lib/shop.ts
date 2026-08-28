@@ -11,7 +11,6 @@ export const STORE_RATING = "5.0";
 
 
 export const CATEGORIES = ["men", "women", "unisex"] as const;
-export const CONDITIONS = [] as const;
 
 export type Product = {
   id: string;
@@ -19,7 +18,6 @@ export type Product = {
   brand: string;
   category: string;
   size: string;
-  condition: string;
   price: number;
   original_price: number | null;
   description: string;

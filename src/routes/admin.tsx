@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
   CATEGORIES,
-  CONDITIONS,
   formatPKR,
   isHiddenSold,
   soldHoursLeft,
@@ -23,7 +22,7 @@ export const Route = createFileRoute("/admin")({
       { title: "Admin Panel — Prime Shoes" },
       {
         name: "description",
-        content: "Add thrifted sneakers with sizes, condition grades, pricing and multiple photos.",
+        content: "Add new shoes with sizes, pricing and multiple photos.",
       },
       { property: "og:title", content: "Admin Panel — Prime Shoes" },
       { property: "og:description", content: "Manage the Prime Shoes inventory." },
@@ -101,7 +100,6 @@ type FormState = {
   brand: string;
   category: string;
   size: string;
-  condition: string;
   price: string;
   original_price: string;
   description: string;
@@ -117,7 +115,6 @@ const EMPTY: FormState = {
   brand: "",
   category: "men",
   size: "",
-  condition: "Premium",
   price: "",
   original_price: "",
   description: "",
@@ -194,7 +191,6 @@ function AdminDashboard({ email }: { email: string }) {
         brand: form.brand.trim(),
         category: form.category,
         size: form.size.trim(),
-        condition: form.condition,
         price: Number(form.price),
         original_price: form.original_price ? Number(form.original_price) : null,
         description: form.description.trim(),
@@ -318,7 +314,7 @@ function AdminDashboard({ email }: { email: string }) {
             </Field>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <Field label="Size">
               <input
                 value={form.size}
@@ -327,22 +323,6 @@ function AdminDashboard({ email }: { email: string }) {
                 className={inputClass}
               />
             </Field>
-            <Field label="Condition / quality">
-              <select
-                value={form.condition}
-                onChange={(e) => setForm({ ...form, condition: e.target.value })}
-                className={inputClass}
-              >
-                {CONDITIONS.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </Field>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
             <Field label="Price (PKR) *">
               <input
                 type="number"
@@ -513,7 +493,7 @@ function AdminDashboard({ email }: { email: string }) {
                     {p.title}
                   </Link>
                   <p className="label-caps text-muted-foreground">
-                    {p.category} · {p.size || "no size"} · {p.condition}
+                    {p.category} · {p.size || "no size"}
                   </p>
                   <p className="text-sm">{formatPKR(p.price)}</p>
                   <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1">

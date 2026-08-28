@@ -40,10 +40,10 @@ export function Header() {
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6">
         <button
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center border border-background/25 md:hidden"
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center text-background/70 transition-colors hover:text-background md:hidden"
           aria-label="Toggle menu"
         >
-          {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
 
         <Link to="/" className="inline-flex shrink-0 items-center">
@@ -63,17 +63,20 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
-          <form onSubmit={submitSearch} className="hidden items-center md:flex">
+        <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
+          <form
+            onSubmit={submitSearch}
+            className="group hidden items-center md:flex"
+          >
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search..."
-              className="h-10 w-40 border border-background/25 bg-transparent px-3 text-sm text-background placeholder:text-background/40 focus:border-background focus:outline-none lg:w-56"
+              className="h-10 w-0 border-b border-transparent bg-transparent px-0 text-sm text-background opacity-0 transition-all duration-300 ease-out placeholder:text-background/40 focus:outline-none group-focus-within:w-40 group-focus-within:border-background/40 group-focus-within:px-2 group-focus-within:opacity-100 group-hover:w-40 group-hover:border-background/40 group-hover:px-2 group-hover:opacity-100 lg:group-focus-within:w-56 lg:group-hover:w-56"
             />
             <button
               type="submit"
-              className="inline-flex h-10 w-10 items-center justify-center border border-background/25 text-background transition-colors hover:bg-background hover:text-foreground"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center text-background/70 transition-colors hover:text-background"
               aria-label="Search"
             >
               <Search className="h-4 w-4" />
@@ -82,7 +85,7 @@ export function Header() {
 
           <button
             onClick={() => setSearchOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center border border-background/25 md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center text-background/70 transition-colors hover:text-background md:hidden"
             aria-label="Toggle search"
           >
             {searchOpen ? <X className="h-4 w-4" /> : <Search className="h-4 w-4" />}
@@ -90,12 +93,12 @@ export function Header() {
 
           <Link
             to="/cart"
-            className="relative inline-flex h-10 w-10 items-center justify-center border border-background/25 transition-colors hover:bg-background hover:text-foreground"
+            className="relative inline-flex h-10 w-10 items-center justify-center text-background/70 transition-colors hover:text-background"
             aria-label="Open cart"
           >
             <ShoppingBag className="h-4 w-4" />
             {count > 0 && (
-              <span className="absolute -top-2 -right-2 grid h-5 min-w-5 place-items-center bg-background px-1 text-[10px] font-bold text-foreground">
+              <span className="absolute -top-1 -right-1 grid h-5 min-w-5 place-items-center rounded-full bg-background px-1 text-[10px] font-bold text-foreground">
                 {count}
               </span>
             )}
@@ -105,16 +108,17 @@ export function Header() {
 
       {searchOpen && (
         <form onSubmit={submitSearch} className="border-t border-background/15 px-4 py-3 md:hidden">
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2 border-b border-background/25">
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search products..."
-              className="h-10 flex-1 border border-background/25 bg-transparent px-3 text-sm text-background placeholder:text-background/40 focus:border-background focus:outline-none"
+              autoFocus
+              className="h-10 flex-1 bg-transparent px-1 text-sm text-background placeholder:text-background/40 focus:outline-none"
             />
             <button
               type="submit"
-              className="inline-flex h-10 w-10 shrink-0 items-center justify-center border border-background/25 text-background transition-colors hover:bg-background hover:text-foreground"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center text-background/70 transition-colors hover:text-background"
               aria-label="Search"
             >
               <Search className="h-4 w-4" />

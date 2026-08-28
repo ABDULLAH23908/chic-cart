@@ -125,7 +125,6 @@ function ProductPage() {
 
           <dl className="mt-8 grid grid-cols-2 gap-px border border-border bg-border">
             <Spec label="Size" value={product.size || "—"} />
-            <Spec label="Condition" value={product.condition} />
             <Spec label="Brand" value={product.brand || "—"} />
             <Spec label="Availability" value={product.in_stock ? "In stock" : "Sold"} />
           </dl>
