@@ -20,13 +20,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Hand-picked thrifted sneakers for men, women and kids. Real photos, honest condition grades, one clear price. Order on WhatsApp.",
+          "Hand-picked thrifted sneakers for men, women and kids. Real photos, honest condition grades, one clear price.",
       },
       { property: "og:title", content: "Prime Shoes — Branded Thrift Clothing in Rawalpindi" },
       {
         property: "og:description",
         content:
-          "Hand-picked thrifted sneakers with real photos and honest grading. Order on WhatsApp.",
+          "Hand-picked thrifted sneakers with real photos and honest grading.",
       },
     ],
   }),
@@ -127,7 +127,7 @@ function Home() {
             {[
               { t: "Delivery", d: "Country-wide delivery, packed and shipped within 24 hours." },
               { t: "COD", d: "Cash on delivery available — pay when your parcel reaches you." },
-              { t: "Exchanges", d: "Size or fit off? Message us on WhatsApp and we'll sort it." },
+              { t: "Exchanges", d: "Size or fit off? Message us and we'll sort it." },
             ].map((f) => (
               <div key={f.t} className="bg-background p-8">
                 <p className="label-caps">{f.t}</p>

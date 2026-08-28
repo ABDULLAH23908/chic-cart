@@ -10,12 +10,12 @@ export const Route = createFileRoute("/cart")({
       { title: "Your Bag — Prime Shoes" },
       {
         name: "description",
-        content: "Review the pairs in your bag and send the order straight to us on WhatsApp.",
+        content: "Review the pairs in your bag before you check out.",
       },
       { property: "og:title", content: "Your Bag — Prime Shoes" },
       {
         property: "og:description",
-        content: "Review your pairs and check out over WhatsApp.",
+        content: "Review your pairs before you check out.",
       },
     ],
   }),
