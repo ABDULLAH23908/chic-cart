@@ -1,17 +1,17 @@
-export const WHATSAPP_NUMBER = "923335129333";
-export const WHATSAPP_DISPLAY = "+92 333 5129333";
+export const WHATSAPP_NUMBER = "923355116194";
+export const WHATSAPP_DISPLAY = "+92 335 5116194";
 export const STORE_NAME = "PRIME SHOES";
 export const STORE_SHORT_NAME = "PRIME";
 export const STORE_TAGLINE = "Prime Footwear · Premium Kicks";
-export const STORE_ADDRESS = "Shop LG 56, Emirates Plaza, Bahria Town Phase 7, Rawalpindi, Pakistan";
+export const STORE_ADDRESS = "";
 export const STORE_MAPS_LINK =
-  "https://www.google.com/maps/search/?api=1&query=" +
-  encodeURIComponent("Prime Shoes Emirates Plaza Bahria Town Phase 7 Rawalpindi");
+  "" +
+  encodeURIComponent("");
 export const STORE_RATING = "5.0";
 
 
 export const CATEGORIES = ["men", "women", "unisex"] as const;
-export const CONDITIONS = ["Premium+", "Premium", "Excellence", "Very Good"] as const;
+export const CONDITIONS = [] as const;
 
 export type Product = {
   id: string;
