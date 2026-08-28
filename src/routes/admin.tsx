@@ -107,6 +107,9 @@ type FormState = {
   description: string;
   in_stock: boolean;
   featured: boolean;
+  trending: boolean;
+  best_seller: boolean;
+  new_arrival: boolean;
 };
 
 const EMPTY: FormState = {
@@ -120,6 +123,9 @@ const EMPTY: FormState = {
   description: "",
   in_stock: true,
   featured: false,
+  trending: false,
+  best_seller: false,
+  new_arrival: false,
 };
 
 function AdminDashboard({ email }: { email: string }) {
@@ -195,6 +201,9 @@ function AdminDashboard({ email }: { email: string }) {
         images: urls,
         in_stock: form.in_stock,
         featured: form.featured,
+        trending: form.trending,
+        best_seller: form.best_seller,
+        new_arrival: form.new_arrival,
       });
       if (error) throw error;
     },
@@ -231,6 +240,24 @@ function AdminDashboard({ email }: { email: string }) {
       qc.invalidateQueries({ queryKey: ["admin-products"] });
       qc.invalidateQueries({ queryKey: ["products"] });
     },
+  });
+
+  const setFlag = useMutation({
+    mutationFn: async ({
+      id,
+      patch,
+    }: {
+      id: string;
+      patch: Partial<Pick<Product, "featured" | "trending" | "best_seller" | "new_arrival">>;
+    }) => {
+      const { error } = await supabase.from("products").update(patch).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin-products"] });
+      qc.invalidateQueries({ queryKey: ["products"] });
+    },
+    onError: (err) => toast.error(err instanceof Error ? err.message : "Could not update"),
   });
 
   return (
@@ -396,6 +423,30 @@ function AdminDashboard({ email }: { email: string }) {
               />
               Feature on home
             </label>
+            <label className="label-caps flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={form.trending}
+                onChange={(e) => setForm({ ...form, trending: e.target.checked })}
+              />
+              Trending now
+            </label>
+            <label className="label-caps flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={form.best_seller}
+                onChange={(e) => setForm({ ...form, best_seller: e.target.checked })}
+              />
+              Best sellers
+            </label>
+            <label className="label-caps flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={form.new_arrival}
+                onChange={(e) => setForm({ ...form, new_arrival: e.target.checked })}
+              />
+              New arrivals
+            </label>
           </div>
 
           <button
@@ -465,6 +516,20 @@ function AdminDashboard({ email }: { email: string }) {
                     {p.category} · {p.size || "no size"} · {p.condition}
                   </p>
                   <p className="text-sm">{formatPKR(p.price)}</p>
+                  <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
+                    {SECTION_FLAGS.map(({ key, label }) => (
+                      <label key={key} className="label-caps flex items-center gap-1.5">
+                        <input
+                          type="checkbox"
+                          checked={!!p[key]}
+                          onChange={(e) =>
+                            setFlag.mutate({ id: p.id, patch: { [key]: e.target.checked } })
+                          }
+                        />
+                        {label}
+                      </label>
+                    ))}
+                  </div>
                   {!p.in_stock && (
                     <p className="label-caps text-muted-foreground">
                       {isHiddenSold(p)
@@ -504,6 +569,13 @@ function AdminDashboard({ email }: { email: string }) {
     </div>
   );
 }
+
+const SECTION_FLAGS = [
+  { key: "featured", label: "Featured" },
+  { key: "trending", label: "Trending" },
+  { key: "best_seller", label: "Best seller" },
+  { key: "new_arrival", label: "New arrival" },
+] as const;
 
 const inputClass =
   "mt-2 w-full border border-border bg-card px-4 py-3 text-sm outline-none focus:border-foreground";
