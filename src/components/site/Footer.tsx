@@ -20,10 +20,7 @@ export function Footer() {
             {STORE_NAME}
           </p>
           <p className="label-caps mt-1 text-background/50">{STORE_TAGLINE}</p>
-          <p className="mt-4 max-w-xs text-sm text-background/60">
-            Imported branded thrift — sportswear, jackets, casual shirts, jeans and one-of-one
-            pieces. Adidas, Puma, Nike and Zara under one roof.
-          </p>
+          <p className="mt-4 max-w-xs text-sm text-background/60">STEP INTO YOUR STYLE</p>
         </div>
 
         <div>
