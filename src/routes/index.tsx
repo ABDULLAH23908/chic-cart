@@ -83,14 +83,12 @@ function Home() {
                 Shop {c}
               </Link>
             ))}
-            <a
-              href={whatsappLink("Hi! I'm looking for a specific piece.")}
-              target="_blank"
-              rel="noreferrer"
-              className="label-caps bg-whatsapp px-6 py-4 text-white transition-opacity hover:opacity-90"
+            <Link
+              to="/shop"
+              className="label-caps bg-background px-6 py-4 text-foreground transition-opacity hover:opacity-90"
             >
-              Order on WhatsApp
-            </a>
+              Shop all
+            </Link>
           </div>
         </div>
       </section>

@@ -88,16 +88,14 @@ function CartPage() {
                 <span className="label-caps text-muted-foreground">Total</span>
                 <span className="font-display text-2xl font-black">{formatPKR(total)}</span>
               </div>
-              <a
-                href={whatsappLink(orderMessage)}
-                target="_blank"
-                rel="noreferrer"
-                className="label-caps mt-5 block bg-whatsapp px-6 py-4 text-center text-white transition-opacity hover:opacity-90"
+              <Link
+                to="/shop"
+                className="label-caps mt-5 block bg-foreground px-6 py-4 text-center text-background transition-opacity hover:opacity-85"
               >
-                Order on WhatsApp
-              </a>
+                Continue shopping
+              </Link>
               <p className="mt-3 text-xs text-muted-foreground">
-                We confirm stock, size and delivery on WhatsApp before payment.
+                Contact details are in the footer if you need help with an order.
               </p>
             </div>
           </div>
