@@ -55,6 +55,7 @@ export function Header() {
           <Logo />
         </Link>
 
+        {/* Desktop Navigation */}
         <nav className="hidden min-w-0 items-center gap-6 md:flex">
           {NAV.map((item) =>
             item.label === "Shop All" ? (
@@ -163,29 +164,36 @@ export function Header() {
         </form>
       )}
 
+      {/* Mobile Navigation */}
       {open && (
         <nav className="border-t border-background/15 md:hidden">
           {NAV.map((item) => (
-            <Link
-              key={item.label}
-              to={item.to}
-              search={item.search}
-              onClick={() => setOpen(false)}
-              className="label-caps block border-b border-background/10 px-4 py-4"
-            >
-              {item.label}
-            </Link>
-          ))}
-          {BRAND_NAV.map((item) => (
-            <Link
-              key={item.label}
-              to={item.to}
-              search={item.search}
-              onClick={() => setOpen(false)}
-              className="label-caps block border-b border-background/10 px-8 py-4 text-background/70"
-            >
-              {item.label}
-            </Link>
+            <div key={item.label} className="border-b border-background/10">
+              <Link
+                to={item.to}
+                search={item.search}
+                onClick={() => setOpen(false)}
+                className="label-caps block px-4 py-3.5 font-bold"
+              >
+                {item.label}
+              </Link>
+              {/* Nested brand sub-items under 'Shop All' */}
+              {item.label === "Shop All" && (
+                <div className="bg-background/5 pb-2 pt-1">
+                  {BRAND_NAV.map((brandItem) => (
+                    <Link
+                      key={brandItem.label}
+                      to={brandItem.to}
+                      search={brandItem.search}
+                      onClick={() => setOpen(false)}
+                      className="label-caps block border-l-2 border-background/20 py-2.5 pl-8 pr-4 text-xs tracking-wider text-background/60 transition-colors hover:border-background hover:text-background"
+                    >
+                      {brandItem.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </nav>
       )}
