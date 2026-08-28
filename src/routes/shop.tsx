@@ -3,10 +3,11 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 
 import { ProductCard } from "@/components/site/ProductCard";
 import { supabase } from "@/integrations/supabase/client";
-import { CATEGORIES, orderForStorefront, type Product } from "@/lib/shop";
+import { BRANDS, CATEGORIES, orderForStorefront, type Product } from "@/lib/shop";
 
 type ShopSearch = {
   category?: string | undefined;
+  brand?: string | undefined;
   sort?: string | undefined;
   q?: string | undefined;
 };
@@ -14,6 +15,7 @@ type ShopSearch = {
 export const Route = createFileRoute("/shop")({
   validateSearch: (search: Record<string, unknown>): ShopSearch => ({
     category: typeof search["category"] === "string" ? search["category"] : undefined,
+    brand: typeof search["brand"] === "string" ? search["brand"] : undefined,
     sort: typeof search["sort"] === "string" ? search["sort"] : undefined,
     q: typeof search["q"] === "string" ? search["q"] : undefined,
   }),
@@ -35,13 +37,14 @@ export const Route = createFileRoute("/shop")({
 });
 
 function ShopPage() {
-  const { category, sort } = Route.useSearch();
+  const { category, brand, sort } = Route.useSearch();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["products", category, sort],
+    queryKey: ["products", category, brand, sort],
     queryFn: async () => {
       let query = supabase.from("products").select("*");
       if (category) query = query.eq("category", category);
+      if (brand) query = query.ilike("brand", brand);
       if (sort === "price-asc") query = query.order("price", { ascending: true });
       else if (sort === "price-desc") query = query.order("price", { ascending: false });
       else query = query.order("created_at", { ascending: false });
@@ -54,7 +57,7 @@ function ShopPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
       <h1 className="text-4xl font-black uppercase sm:text-5xl">
-        {category ? category : "Shop all"}
+        {category || brand || "Shop all"}
       </h1>
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
         Fresh pairs, photographed by hand. What you see is exactly what lands at your door.
@@ -62,20 +65,36 @@ function ShopPage() {
 
       <div className="mt-8 space-y-4 border-y border-border py-5">
         <FilterRow label="Category">
-          <FilterChip to={{ sort }} active={!category} label="All" />
+          <FilterChip to={{ brand, sort }} active={!category} label="All" />
           {CATEGORIES.map((c) => (
-            <FilterChip key={c} to={{ category: c, sort }} active={category === c} label={c} />
+            <FilterChip
+              key={c}
+              to={{ category: c, brand, sort }}
+              active={category === c}
+              label={c}
+            />
+          ))}
+        </FilterRow>
+        <FilterRow label="Brand">
+          <FilterChip to={{ category, sort }} active={!brand} label="All" />
+          {BRANDS.map((b) => (
+            <FilterChip
+              key={b}
+              to={{ category, brand: b, sort }}
+              active={brand === b}
+              label={b}
+            />
           ))}
         </FilterRow>
         <FilterRow label="Sort">
-          <FilterChip to={{ category }} active={!sort} label="Newest" />
+          <FilterChip to={{ category, brand }} active={!sort} label="Newest" />
           <FilterChip
-            to={{ category, sort: "price-asc" }}
+            to={{ category, brand, sort: "price-asc" }}
             active={sort === "price-asc"}
             label="Price low → high"
           />
           <FilterChip
-            to={{ category, sort: "price-desc" }}
+            to={{ category, brand, sort: "price-desc" }}
             active={sort === "price-desc"}
             label="Price high → low"
           />

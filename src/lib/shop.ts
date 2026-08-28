@@ -12,6 +12,8 @@ export const STORE_RATING = "5.0";
 
 export const CATEGORIES = ["men", "women", "unisex"] as const;
 
+export const BRANDS = ["Adidas", "Nike"] as const;
+
 export type Product = {
   id: string;
   title: string;

@@ -5,12 +5,13 @@ import { Menu, Search, ShoppingBag, X } from "lucide-react";
 import { useState, type FormEvent } from "react";
 
 import { useCart } from "@/lib/cart";
+import { BRANDS } from "@/lib/shop";
 import { Logo } from "./Logo";
 
 type NavItem = {
   label: string;
   to: "/shop";
-  search: { category?: string; q?: string };
+  search: { category?: string; brand?: string; q?: string };
 };
 
 const NAV: NavItem[] = [
@@ -19,6 +20,12 @@ const NAV: NavItem[] = [
   { label: "Women", to: "/shop", search: { category: "women" } },
   { label: "Unisex", to: "/shop", search: { category: "unisex" } },
 ];
+
+const BRAND_NAV: NavItem[] = BRANDS.map((b) => ({
+  label: b,
+  to: "/shop",
+  search: { brand: b },
+}));
 
 export function Header() {
   const { count } = useCart();
@@ -51,16 +58,47 @@ export function Header() {
         </Link>
 
         <nav className="hidden min-w-0 items-center gap-6 md:flex">
-          {NAV.map((item) => (
-            <Link
-              key={item.label}
-              to={item.to}
-              search={item.search}
-              className="label-caps inline-flex items-center text-background/70 transition-colors hover:text-background"
-            >
-              {item.label}
-            </Link>
-          ))}
+          {NAV.map((item) =>
+            item.label === "Shop All" ? (
+              <div key={item.label} className="group relative">
+                <Link
+                  to={item.to}
+                  search={item.search}
+                  className="label-caps inline-flex items-center text-background/70 transition-colors hover:text-background"
+                >
+                  {item.label}
+                </Link>
+                <div className="invisible absolute left-0 top-full z-50 min-w-40 border border-background/15 bg-foreground py-2 opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100">
+                  <Link
+                    to="/shop"
+                    search={{}}
+                    className="label-caps block px-4 py-2 text-background/70 transition-colors hover:bg-background/10 hover:text-background"
+                  >
+                    All
+                  </Link>
+                  {BRAND_NAV.map((b) => (
+                    <Link
+                      key={b.label}
+                      to={b.to}
+                      search={b.search}
+                      className="label-caps block px-4 py-2 text-background/70 transition-colors hover:bg-background/10 hover:text-background"
+                    >
+                      {b.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={item.label}
+                to={item.to}
+                search={item.search}
+                className="label-caps inline-flex items-center text-background/70 transition-colors hover:text-background"
+              >
+                {item.label}
+              </Link>
+            )
+          )}
         </nav>
 
         <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
@@ -136,6 +174,17 @@ export function Header() {
               search={item.search}
               onClick={() => setOpen(false)}
               className="label-caps block border-b border-background/10 px-4 py-4"
+            >
+              {item.label}
+            </Link>
+          ))}
+          {BRAND_NAV.map((item) => (
+            <Link
+              key={item.label}
+              to={item.to}
+              search={item.search}
+              onClick={() => setOpen(false)}
+              className="label-caps block border-b border-background/10 px-8 py-4 text-background/70"
             >
               {item.label}
             </Link>
