@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-sneakers.jpg";
 import { ProductCard } from "@/components/site/ProductCard";
 import { ReviewsSection } from "@/components/site/ReviewsSection";
+import { TrendingCarousel } from "@/components/site/TrendingCarousel";
 import { supabase } from "@/integrations/supabase/client";
 import {
   CATEGORIES,
@@ -48,10 +49,13 @@ function Home() {
   });
 
   const all = products ?? [];
-  const trending = all.filter((p) => p.featured).slice(0, 4);
-  const trendingRow = (trending.length > 0 ? trending : all).slice(0, 4);
-  const bestSellers = all.slice(4, 8);
-  const newArrivals = all.slice(0, 4);
+  const pick = (flag: (p: Product) => boolean, fallback: Product[], n = 4) => {
+    const tagged = all.filter(flag);
+    return (tagged.length > 0 ? tagged : fallback).slice(0, n);
+  };
+  const trendingRow = pick((p) => p.trending || p.featured, all, 8);
+  const bestSellers = pick((p) => p.best_seller, all.slice(4, 8));
+  const newArrivals = pick((p) => p.new_arrival, all.slice(0, 4));
 
   return (
     <div>
@@ -93,7 +97,15 @@ function Home() {
       </section>
 
       {/* TRENDING NOW */}
-      <ProductRow title="Trending now" items={trendingRow} />
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
+          <h2 className="text-3xl font-black uppercase sm:text-4xl">Trending now</h2>
+          <Link to="/shop" className="label-caps shrink-0 underline">
+            View all
+          </Link>
+        </div>
+        <TrendingCarousel items={trendingRow} />
+      </section>
 
       {/* SHOP BY CATEGORY */}
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
@@ -114,7 +126,7 @@ function Home() {
       </section>
 
       {/* BEST SELLERS */}
-      <ProductRow title="Best sellers" items={bestSellers.length > 0 ? bestSellers : trendingRow} />
+      <ProductRow title="Best sellers" items={bestSellers} />
 
       {/* NEW ARRIVALS */}
       <ProductRow title="New arrivals" items={newArrivals} />

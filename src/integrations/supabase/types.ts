@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       products: {
         Row: {
+          best_seller: boolean
           brand: string
           category: string
           condition: string
@@ -25,14 +26,17 @@ export type Database = {
           id: string
           images: string[]
           in_stock: boolean
+          new_arrival: boolean
           original_price: number | null
           price: number
           size: string
           sold_at: string | null
           title: string
+          trending: boolean
           updated_at: string
         }
         Insert: {
+          best_seller?: boolean
           brand?: string
           category?: string
           condition?: string
@@ -42,14 +46,17 @@ export type Database = {
           id?: string
           images?: string[]
           in_stock?: boolean
+          new_arrival?: boolean
           original_price?: number | null
           price?: number
           size?: string
           sold_at?: string | null
           title: string
+          trending?: boolean
           updated_at?: string
         }
         Update: {
+          best_seller?: boolean
           brand?: string
           category?: string
           condition?: string
@@ -59,11 +66,13 @@ export type Database = {
           id?: string
           images?: string[]
           in_stock?: boolean
+          new_arrival?: boolean
           original_price?: number | null
           price?: number
           size?: string
           sold_at?: string | null
           title?: string
+          trending?: boolean
           updated_at?: string
         }
         Relationships: []

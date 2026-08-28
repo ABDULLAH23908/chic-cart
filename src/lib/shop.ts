@@ -26,6 +26,9 @@ export type Product = {
   images: string[];
   in_stock: boolean;
   featured: boolean;
+  trending: boolean;
+  best_seller: boolean;
+  new_arrival: boolean;
   sold_at: string | null;
   created_at: string;
 };
