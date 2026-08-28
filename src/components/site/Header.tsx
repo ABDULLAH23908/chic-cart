@@ -1,5 +1,3 @@
-// src/components/site/Header.tsx
-
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Menu, Search, ShoppingBag, X } from "lucide-react";
 import { useState, type FormEvent } from "react";
@@ -60,7 +58,7 @@ export function Header() {
         <nav className="hidden min-w-0 items-center gap-6 md:flex">
           {NAV.map((item) =>
             item.label === "Shop All" ? (
-              <div key={item.label} className="group relative">
+              <div key={item.label} className="group relative flex items-center">
                 <Link
                   to={item.to}
                   search={item.search}
