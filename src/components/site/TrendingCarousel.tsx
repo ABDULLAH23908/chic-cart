@@ -26,10 +26,11 @@ export function TrendingCarousel({ items }: { items: Product[] }) {
   }
 
   // three visible slots: previous, active (big), next
+  const at = (i: number) => items[((i % count) + count) % count]!;
   const slots = [
-    { p: items[(active - 1 + count) % count], role: "side" as const },
-    { p: items[active], role: "center" as const },
-    { p: items[(active + 1) % count], role: "side" as const },
+    { p: at(active - 1), role: "side" as const },
+    { p: at(active), role: "center" as const },
+    { p: at(active + 1), role: "side" as const },
   ];
 
   return (
