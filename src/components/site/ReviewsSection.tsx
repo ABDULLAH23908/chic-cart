@@ -25,8 +25,7 @@ import {
   type ReviewSort,
 } from "@/lib/reviews";
 
-
-const FILTERS: ReviewFilter[] = ["All", "Jackets"];
+const FILTERS: ReviewFilter[] = ["All", "Nike", "Adidas"];
 const SORTS: { value: ReviewSort; label: string }[] = [
   { value: "relevant", label: "Most relevant" },
   { value: "newest", label: "Newest" },
@@ -96,7 +95,6 @@ export function ReviewsSection() {
             toast.success("Thanks for your review!");
           }}
         />
-
       </div>
 
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
@@ -189,7 +187,7 @@ function WriteReviewDialog({
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
   const [body, setBody] = useState("");
-  const [tag, setTag] = useState<"Jackets" | "General">("General");
+  const [tag, setTag] = useState<"General" | "Nike" | "Adidas">("General");
   const [photo, setPhoto] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -239,7 +237,6 @@ function WriteReviewDialog({
       setSaving(false);
     }
   }
-
 
   return (
     <Dialog
@@ -294,7 +291,7 @@ function WriteReviewDialog({
           <div className="grid gap-1.5">
             <Label>What's it about?</Label>
             <div className="flex gap-2">
-              {(["General", "Jackets"] as const).map((t) => (
+              {(["General", "Nike", "Adidas"] as const).map((t) => (
                 <button
                   key={t}
                   type="button"
@@ -365,7 +362,6 @@ function WriteReviewDialog({
           <p className="text-xs text-muted-foreground">
             Your review is published for everyone and shown alongside our Google reviews.
           </p>
-
         </div>
       </DialogContent>
     </Dialog>
