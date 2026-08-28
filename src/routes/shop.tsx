@@ -25,7 +25,7 @@ export const Route = createFileRoute("/shop")({
       {
         name: "description",
         content:
-          "Browse every hand-picked thrifted sneaker in stock: filter by men, women, kids, condition grade and price.",
+          "Browse every hand-picked thrifted sneaker in stock: filter by men, women, unisex, condition grade and price.",
       },
       { property: "og:title", content: "Shop All Thrifted Sneakers — Prime Shoes" },
       {

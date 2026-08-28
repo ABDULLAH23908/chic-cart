@@ -1,0 +1,82 @@
+diff --git a/src/components/site/Footer.tsx b/src/components/site/Footer.tsx
+index 223bf6f..2c49c2f 100644
+--- a/src/components/site/Footer.tsx
++++ b/src/components/site/Footer.tsx
+@@ -55,10 +55,10 @@ export function Footer() {
+             <li>
+               <Link 
+                 to="/shop" 
+-                search={{ category: "kids" }} 
++                search={{ category: "unisex" }} 
+                 className="hover:underline"
+               >
+-                Kids
++                Unisex
+               </Link>
+             </li>
+           </ul>
+diff --git a/src/components/site/Header.tsx b/src/components/site/Header.tsx
+index bdc7bb4..5cf5d18 100644
+--- a/src/components/site/Header.tsx
++++ b/src/components/site/Header.tsx
+@@ -17,7 +17,7 @@ const NAV: NavItem[] = [
+   { label: "Shop All", to: "/shop", search: {} },
+   { label: "Men", to: "/shop", search: { category: "men" } },
+   { label: "Women", to: "/shop", search: { category: "women" } },
+-  { label: "Kids", to: "/shop", search: { category: "kids" } },
++  { label: "Unisex", to: "/shop", search: { category: "unisex" } },
+ ];
+ 
+ export function Header() {
+diff --git a/src/lib/products.ts b/src/lib/products.ts
+index aef6690..55c9b44 100644
+--- a/src/lib/products.ts
++++ b/src/lib/products.ts
+@@ -5,7 +5,7 @@
+  * "Import bulk list" in the admin panel — every row is inserted into the store.
+  *
+  * Rules:
+- *  - category must be one of: men | women | kids
++ *  - category must be one of: men | women | unisex
+  *  - condition must be one of: Premium+ | Premium | Excellence | Very Good
+  *  - price / original_price are plain numbers in PKR
+  *  - images are full https URLs (paste links, or upload photos in the form instead)
+diff --git a/src/lib/shop.ts b/src/lib/shop.ts
+index fdebc28..7a248e4 100644
+--- a/src/lib/shop.ts
++++ b/src/lib/shop.ts
+@@ -10,7 +10,7 @@ export const STORE_MAPS_LINK =
+ export const STORE_RATING = "5.0";
+ 
+ 
+-export const CATEGORIES = ["men", "women", "kids"] as const;
++export const CATEGORIES = ["men", "women", "unisex"] as const;
+ export const CONDITIONS = ["Premium+", "Premium", "Excellence", "Very Good"] as const;
+ 
+ export type Product = {
+diff --git a/src/routes/index.tsx b/src/routes/index.tsx
+index d2ae781..a80af42 100644
+--- a/src/routes/index.tsx
++++ b/src/routes/index.tsx
+@@ -20,7 +20,7 @@ export const Route = createFileRoute("/")({
+       {
+         name: "description",
+         content:
+-          "Hand-picked thrifted sneakers for men, women and kids. Real photos, honest condition grades, one clear price.",
++          "Hand-picked thrifted sneakers for men, women and unisex. Real photos, honest condition grades, one clear price.",
+       },
+       { property: "og:title", content: "Prime Shoes — Branded Thrift Clothing in Rawalpindi" },
+       {
+diff --git a/src/routes/shop.tsx b/src/routes/shop.tsx
+index a0d62dd..520d7d7 100644
+--- a/src/routes/shop.tsx
++++ b/src/routes/shop.tsx
+@@ -25,7 +25,7 @@ export const Route = createFileRoute("/shop")({
+       {
+         name: "description",
+         content:
+-          "Browse every hand-picked thrifted sneaker in stock: filter by men, women, kids, condition grade and price.",
++          "Browse every hand-picked thrifted sneaker in stock: filter by men, women, unisex, condition grade and price.",
+       },
+       { property: "og:title", content: "Shop All Thrifted Sneakers — Prime Shoes" },
+       {

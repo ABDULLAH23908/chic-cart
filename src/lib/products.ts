@@ -5,7 +5,7 @@
  * "Import bulk list" in the admin panel — every row is inserted into the store.
  *
  * Rules:
- *  - category must be one of: men | women | kids
+ *  - category must be one of: men | women | unisex
  *  - condition must be one of: Premium+ | Premium | Excellence | Very Good
  *  - price / original_price are plain numbers in PKR
  *  - images are full https URLs (paste links, or upload photos in the form instead)

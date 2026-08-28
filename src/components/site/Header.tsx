@@ -17,7 +17,7 @@ const NAV: NavItem[] = [
   { label: "Shop All", to: "/shop", search: {} },
   { label: "Men", to: "/shop", search: { category: "men" } },
   { label: "Women", to: "/shop", search: { category: "women" } },
-  { label: "Kids", to: "/shop", search: { category: "kids" } },
+  { label: "Unisex", to: "/shop", search: { category: "unisex" } },
 ];
 
 export function Header() {

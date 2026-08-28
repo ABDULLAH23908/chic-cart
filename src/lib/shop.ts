@@ -10,7 +10,7 @@ export const STORE_MAPS_LINK =
 export const STORE_RATING = "5.0";
 
 
-export const CATEGORIES = ["men", "women", "kids"] as const;
+export const CATEGORIES = ["men", "women", "unisex"] as const;
 export const CONDITIONS = ["Premium+", "Premium", "Excellence", "Very Good"] as const;
 
 export type Product = {

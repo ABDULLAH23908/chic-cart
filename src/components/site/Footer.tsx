@@ -55,10 +55,10 @@ export function Footer() {
             <li>
               <Link 
                 to="/shop" 
-                search={{ category: "kids" }} 
+                search={{ category: "unisex" }} 
                 className="hover:underline"
               >
-                Kids
+                Unisex
               </Link>
             </li>
           </ul>

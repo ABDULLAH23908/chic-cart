@@ -20,7 +20,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Hand-picked thrifted sneakers for men, women and kids. Real photos, honest condition grades, one clear price.",
+          "Hand-picked thrifted sneakers for men, women and unisex. Real photos, honest condition grades, one clear price.",
       },
       { property: "og:title", content: "Prime Shoes — Branded Thrift Clothing in Rawalpindi" },
       {
