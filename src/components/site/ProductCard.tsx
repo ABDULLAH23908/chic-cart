@@ -81,16 +81,13 @@ export function ProductCard({ product }: { product: Product }) {
             </>
           )}
         </button>
-        <a
-          href={whatsappLink(
-            `Hi! I want this pair:\n${product.title}\nSize: ${product.size}\nPrice: ${formatPKR(product.price)}`,
-          )}
-          target="_blank"
-          rel="noreferrer"
-          className="label-caps bg-whatsapp px-3 py-3 text-center text-white transition-opacity hover:opacity-90"
+        <Link
+          to="/product/$id"
+          params={{ id: product.id }}
+          className="label-caps bg-card px-3 py-3 text-center transition-colors hover:bg-secondary"
         >
-          Order on WhatsApp
-        </a>
+          View details
+        </Link>
       </div>
     </article>
   );

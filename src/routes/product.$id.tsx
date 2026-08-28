@@ -165,16 +165,12 @@ function ProductPage() {
                 </>
               )}
             </button>
-            <a
-              href={whatsappLink(
-                `Hi! I want to order:\n${product.title}\nSize: ${product.size}\nCondition: ${product.condition}\nPrice: ${formatPKR(product.price)}`,
-              )}
-              target="_blank"
-              rel="noreferrer"
-              className="label-caps bg-whatsapp px-6 py-4 text-center text-white transition-opacity hover:opacity-90"
+            <Link
+              to="/cart"
+              className="label-caps border border-foreground px-6 py-4 text-center transition-colors hover:bg-secondary"
             >
-              Order on WhatsApp
-            </a>
+              Go to bag
+            </Link>
           </div>
 
           <p className="mt-4 text-xs text-muted-foreground">

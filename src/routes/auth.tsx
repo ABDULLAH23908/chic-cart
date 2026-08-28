@@ -57,7 +57,7 @@ function AuthPage() {
         {mode === "signin" ? "Store sign in" : "Create account"}
       </h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Admin access only. Customers order straight over WhatsApp.
+        Admin access only.
       </p>
 
       <form onSubmit={submit} className="mt-8 space-y-4">

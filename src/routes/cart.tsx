@@ -10,12 +10,12 @@ export const Route = createFileRoute("/cart")({
       { title: "Your Bag — Prime Shoes" },
       {
         name: "description",
-        content: "Review the pairs in your bag and send the order straight to us on WhatsApp.",
+        content: "Review the pairs in your bag before you check out.",
       },
       { property: "og:title", content: "Your Bag — Prime Shoes" },
       {
         property: "og:description",
-        content: "Review your pairs and check out over WhatsApp.",
+        content: "Review your pairs before you check out.",
       },
     ],
   }),
@@ -24,11 +24,6 @@ export const Route = createFileRoute("/cart")({
 
 function CartPage() {
   const { items, total, remove, clear } = useCart();
-
-  const orderMessage =
-    "Hi! I'd like to order:\n\n" +
-    items.map((i) => `• ${i.title} (${i.size || "size n/a"}) — ${formatPKR(i.price)}`).join("\n") +
-    `\n\nTotal: ${formatPKR(total)}`;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
@@ -88,16 +83,14 @@ function CartPage() {
                 <span className="label-caps text-muted-foreground">Total</span>
                 <span className="font-display text-2xl font-black">{formatPKR(total)}</span>
               </div>
-              <a
-                href={whatsappLink(orderMessage)}
-                target="_blank"
-                rel="noreferrer"
-                className="label-caps mt-5 block bg-whatsapp px-6 py-4 text-center text-white transition-opacity hover:opacity-90"
+              <Link
+                to="/shop"
+                className="label-caps mt-5 block bg-foreground px-6 py-4 text-center text-background transition-opacity hover:opacity-85"
               >
-                Order on WhatsApp
-              </a>
+                Continue shopping
+              </Link>
               <p className="mt-3 text-xs text-muted-foreground">
-                We confirm stock, size and delivery on WhatsApp before payment.
+                Contact details are in the footer if you need help with an order.
               </p>
             </div>
           </div>
