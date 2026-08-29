@@ -84,13 +84,19 @@ function CartPage() {
                 <span className="font-display text-2xl font-black">{formatPKR(total)}</span>
               </div>
               <Link
-                to="/shop"
+                to="/checkout"
                 className="label-caps mt-5 block bg-foreground px-6 py-4 text-center text-background transition-opacity hover:opacity-85"
+              >
+                Checkout
+              </Link>
+              <Link
+                to="/shop"
+                className="label-caps mt-3 block border border-foreground px-6 py-4 text-center transition-colors hover:bg-secondary"
               >
                 Continue shopping
               </Link>
               <p className="mt-3 text-xs text-muted-foreground">
-                Contact details are in the footer if you need help with an order.
+                Cash on delivery, JazzCash, Easypaisa or bank transfer — all on the next step.
               </p>
             </div>
           </div>
