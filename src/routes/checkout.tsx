@@ -56,11 +56,22 @@ function CheckoutPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.customer_name.trim()) return toast.error("Add your full name");
-    if (form.phone.trim().length < 6) return toast.error("Add a phone number we can reach");
-    if (form.address.trim().length < 5) return toast.error("Add your delivery address");
-    if (selected.requiresReceipt && !receipt)
-      return toast.error("Attach your payment receipt screenshot");
+    if (!form.customer_name.trim()) {
+      toast.error("Add your full name");
+      return;
+    }
+    if (form.phone.trim().length < 6) {
+      toast.error("Add a phone number we can reach");
+      return;
+    }
+    if (form.address.trim().length < 5) {
+      toast.error("Add your delivery address");
+      return;
+    }
+    if (selected.requiresReceipt && !receipt) {
+      toast.error("Attach your payment receipt screenshot");
+      return;
+    }
 
     setSubmitting(true);
     try {
