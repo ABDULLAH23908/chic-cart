@@ -6,7 +6,7 @@ export type Review = {
   authorMeta: string;
   rating: 1 | 2 | 3 | 4 | 5;
   body: string;
-  tag: "Jackets" | "General";
+  tag: ReviewTag;
   timeLabel: string;
   /** Used for "Newest" sorting. */
   sortDate: string;
@@ -17,7 +17,9 @@ export type Review = {
 /** Empty seeded reviews array. */
 export const SEED_REVIEWS: Review[] = [];
 
-export type ReviewFilter = "All" | "Jackets";
+export type ReviewTag = "General" | "Nike" | "Adidas";
+export const REVIEW_TAGS: ReviewTag[] = ["General", "Nike", "Adidas"];
+export type ReviewFilter = "All" | "Nike" | "Adidas";
 export type ReviewSort = "relevant" | "newest" | "highest" | "lowest";
 
 export function filterReviews(reviews: Review[], filter: ReviewFilter) {
@@ -42,6 +44,10 @@ export function sortReviews(reviews: Review[], sort: ReviewSort) {
 export function averageRating(reviews: Review[]) {
   if (reviews.length === 0) return 0;
   return reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+}
+
+function normalizeTag(tag: string): ReviewTag {
+  return REVIEW_TAGS.includes(tag as ReviewTag) ? (tag as ReviewTag) : "General";
 }
 
 function timeAgo(iso: string) {
@@ -71,7 +77,7 @@ export async function fetchUserReviews(): Promise<Review[]> {
     authorMeta: "1 review",
     rating: r.rating as Review["rating"],
     body: r.body,
-    tag: (r.tag === "Jackets" ? "Jackets" : "General") as Review["tag"],
+    tag: normalizeTag(r.tag),
     timeLabel: timeAgo(r.created_at),
     sortDate: r.created_at,
     photo: r.photo,
@@ -83,7 +89,7 @@ export async function submitUserReview(input: {
   author: string;
   rating: number;
   body: string;
-  tag: "Jackets" | "General";
+  tag: ReviewTag;
   photo?: string | null;
 }): Promise<Review> {
   const { data, error } = await supabase
@@ -104,7 +110,7 @@ export async function submitUserReview(input: {
     authorMeta: "1 review",
     rating: data.rating as Review["rating"],
     body: data.body,
-    tag: (data.tag === "Jackets" ? "Jackets" : "General") as Review["tag"],
+    tag: normalizeTag(data.tag),
     timeLabel: "Just now",
     sortDate: data.created_at,
     photo: data.photo,
