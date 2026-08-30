@@ -4,7 +4,7 @@ interface ZoomImageProps {
   src: string;
   alt: string;
   zoom?: number;
-  lensSize?: number; // Size of the circular lens in pixels
+  lensSize?: number; // Lens size in pixels
 }
 
 export function ZoomImage({
@@ -15,20 +15,22 @@ export function ZoomImage({
 }: ZoomImageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
-  const [pos, setPos] = useState({ x: 0, y: 0 }); // Mouse position relative to container (px)
-  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const [pos, setPos] = useState({ x: 0, y: 0 }); // Mouse position (px)
+  const [percent, setPercent] = useState({ x: 50, y: 50 }); // Mouse position (%)
 
   const move = (clientX: number, clientY: number) => {
     const el = containerRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    
-    // Calculate position in pixels within the container
+
     const xPx = Math.min(Math.max(clientX - rect.left, 0), rect.width);
     const yPx = Math.min(Math.max(clientY - rect.top, 0), rect.height);
 
     setPos({ x: xPx, y: yPx });
-    setContainerSize({ width: rect.width, height: rect.height });
+    setPercent({
+      x: (xPx / rect.width) * 100,
+      y: (yPx / rect.height) * 100,
+    });
   };
 
   return (
@@ -68,8 +70,10 @@ export function ZoomImage({
             top: `${pos.y - lensSize / 2}px`,
             backgroundImage: `url("${src}")`,
             backgroundRepeat: "no-repeat",
-            backgroundSize: `${containerSize.width * zoom}px ${containerSize.height * zoom}px`,
-            backgroundPosition: `${lensSize / 2 - pos.x * zoom}px ${lensSize / 2 - pos.y * zoom}px`,
+            /* 1. Scales image based on lens size relative to container */
+            backgroundSize: `calc(${zoom * 100}% * (var(--container-w, 100) / ${lensSize}))`, 
+            /* 2. Standard CSS percentage alignment offset for zoom focal points */
+            backgroundPosition: `${percent.x}% ${percent.y}%`,
           }}
         />
       )}
