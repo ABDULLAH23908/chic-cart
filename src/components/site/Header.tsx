@@ -1,7 +1,5 @@
-// src/components/site/Header.tsx
-
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Menu, Search, ShoppingBag, X } from "lucide-react";
+import { ChevronDown, Menu, Search, ShoppingBag, X } from "lucide-react";
 import { useState, type FormEvent } from "react";
 
 import { useCart } from "@/lib/cart";
@@ -31,6 +29,7 @@ export function Header() {
   const { count } = useCart();
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [shopAllOpen, setShopAllOpen] = useState(false);
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
@@ -57,36 +56,47 @@ export function Header() {
           <Logo />
         </Link>
 
+        {/* Desktop Navigation */}
         <nav className="hidden min-w-0 items-center gap-6 md:flex">
           {NAV.map((item) =>
             item.label === "Shop All" ? (
-              <div key={item.label} className="group relative">
-                <Link
-                  to={item.to}
-                  search={item.search}
-                  className="label-caps inline-flex items-center text-background/70 transition-colors hover:text-background"
+              <div key={item.label} className="relative flex items-center">
+                <button
+                  type="button"
+                  onClick={() => setShopAllOpen((prev) => !prev)}
+                  className="label-caps inline-flex items-center gap-1.5 text-background/70 transition-colors hover:text-background"
                 >
                   {item.label}
-                </Link>
-                <div className="invisible absolute left-0 top-full z-50 min-w-40 border border-background/15 bg-foreground py-2 opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100">
-                  <Link
-                    to="/shop"
-                    search={{}}
-                    className="label-caps block px-4 py-2 text-background/70 transition-colors hover:bg-background/10 hover:text-background"
-                  >
-                    All
-                  </Link>
-                  {BRAND_NAV.map((b) => (
+                  <ChevronDown
+                    className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                      shopAllOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {shopAllOpen && (
+                  <div className="absolute left-0 top-full z-50 min-w-40 border border-background/15 bg-foreground py-2 shadow-xl">
                     <Link
-                      key={b.label}
-                      to={b.to}
-                      search={b.search}
+                      to="/shop"
+                      search={{}}
+                      onClick={() => setShopAllOpen(false)}
                       className="label-caps block px-4 py-2 text-background/70 transition-colors hover:bg-background/10 hover:text-background"
                     >
-                      {b.label}
+                      All
                     </Link>
-                  ))}
-                </div>
+                    {BRAND_NAV.map((b) => (
+                      <Link
+                        key={b.label}
+                        to={b.to}
+                        search={b.search}
+                        onClick={() => setShopAllOpen(false)}
+                        className="label-caps block px-4 py-2 text-background/70 transition-colors hover:bg-background/10 hover:text-background"
+                      >
+                        {b.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
             ) : (
               <Link
@@ -165,29 +175,61 @@ export function Header() {
         </form>
       )}
 
+      {/* Mobile Navigation */}
       {open && (
         <nav className="border-t border-background/15 md:hidden">
           {NAV.map((item) => (
-            <Link
-              key={item.label}
-              to={item.to}
-              search={item.search}
-              onClick={() => setOpen(false)}
-              className="label-caps block border-b border-background/10 px-4 py-4"
-            >
-              {item.label}
-            </Link>
-          ))}
-          {BRAND_NAV.map((item) => (
-            <Link
-              key={item.label}
-              to={item.to}
-              search={item.search}
-              onClick={() => setOpen(false)}
-              className="label-caps block border-b border-background/10 px-8 py-4 text-background/70"
-            >
-              {item.label}
-            </Link>
+            <div key={item.label} className="border-b border-background/10">
+              {item.label === "Shop All" ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setShopAllOpen((prev) => !prev)}
+                    className="label-caps flex w-full items-center justify-between px-4 py-3.5 font-bold"
+                  >
+                    <span>{item.label}</span>
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform duration-200 ${
+                        shopAllOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {shopAllOpen && (
+                    <div className="bg-background/5 pb-2 pt-1">
+                      <Link
+                        to="/shop"
+                        search={{}}
+                        onClick={() => setOpen(false)}
+                        className="label-caps block border-l-2 border-background/20 py-2.5 pl-8 pr-4 text-xs tracking-wider text-background/60 transition-colors hover:border-background hover:text-background"
+                      >
+                        All Products
+                      </Link>
+                      {BRAND_NAV.map((brandItem) => (
+                        <Link
+                          key={brandItem.label}
+                          to={brandItem.to}
+                          search={brandItem.search}
+                          onClick={() => setOpen(false)}
+                          className="label-caps block border-l-2 border-background/20 py-2.5 pl-8 pr-4 text-xs tracking-wider text-background/60 transition-colors hover:border-background hover:text-background"
+                        >
+                          {brandItem.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <Link
+                  to={item.to}
+                  search={item.search}
+                  onClick={() => setOpen(false)}
+                  className="label-caps block px-4 py-3.5 font-bold"
+                >
+                  {item.label}
+                </Link>
+              )}
+            </div>
           ))}
         </nav>
       )}

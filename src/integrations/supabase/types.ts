@@ -10,10 +10,109 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.17"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
+      order_items: {
+        Row: {
+          brand: string
+          created_at: string
+          id: string
+          order_id: string
+          price: number
+          product_id: string | null
+          size: string
+          title: string
+        }
+        Insert: {
+          brand?: string
+          created_at?: string
+          id?: string
+          order_id: string
+          price?: number
+          product_id?: string | null
+          size?: string
+          title?: string
+        }
+        Update: {
+          brand?: string
+          created_at?: string
+          id?: string
+          order_id?: string
+          price?: number
+          product_id?: string | null
+          size?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          address: string
+          city: string
+          created_at: string
+          customer_name: string
+          email: string
+          id: string
+          notes: string
+          payment_method: string
+          payment_reference: string
+          phone: string
+          receipt_image: string | null
+          status: string
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          city?: string
+          created_at?: string
+          customer_name: string
+          email?: string
+          id?: string
+          notes?: string
+          payment_method?: string
+          payment_reference?: string
+          phone: string
+          receipt_image?: string | null
+          status?: string
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          city?: string
+          created_at?: string
+          customer_name?: string
+          email?: string
+          id?: string
+          notes?: string
+          payment_method?: string
+          payment_reference?: string
+          phone?: string
+          receipt_image?: string | null
+          status?: string
+          total?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           best_seller: boolean
