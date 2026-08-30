@@ -1,30 +1,43 @@
 import { useRef, useState } from "react";
 
-/**
- * Product image zoom. Scales the same rendered <img> around the pointer
- * position via CSS transform, so the magnified view always matches exactly
- * what's on screen — no separate background-image math to get out of sync
- * with the image's actual crop.
- * Works with mouse (hover) and touch (press-and-drag) via pointer events.
- */
-export function ZoomImage({ src, alt, zoom = 2.4 }: { src: string; alt: string; zoom?: number }) {
+interface ZoomImageProps {
+  src: string;
+  alt: string;
+  zoom?: number;
+  lensSize?: number; // Size of the circular lens in pixels
+}
+
+export function ZoomImage({
+  src,
+  alt,
+  zoom = 2.4,
+  lensSize = 160,
+}: ZoomImageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
-  const [origin, setOrigin] = useState({ x: 50, y: 50 });
+  const [pos, setPos] = useState({ x: 0, y: 0 }); // Mouse position relative to container (px)
+  const [percent, setPercent] = useState({ x: 50, y: 50 }); // Mouse position relative to container (%)
 
   const move = (clientX: number, clientY: number) => {
     const el = containerRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const x = (Math.min(Math.max(clientX - rect.left, 0), rect.width) / rect.width) * 100;
-    const y = (Math.min(Math.max(clientY - rect.top, 0), rect.height) / rect.height) * 100;
-    setOrigin({ x, y });
+    
+    // Calculate position in pixels within the container
+    const xPx = Math.min(Math.max(clientX - rect.left, 0), rect.width);
+    const yPx = Math.min(Math.max(clientY - rect.top, 0), rect.height);
+
+    setPos({ x: xPx, y: yPx });
+    setPercent({
+      x: (xPx / rect.width) * 100,
+      y: (yPx / rect.height) * 100,
+    });
   };
 
   return (
     <div
       ref={containerRef}
-      className="relative aspect-square w-full touch-none overflow-hidden border border-border bg-secondary select-none"
+      className="relative aspect-square w-full touch-none overflow-hidden border border-border bg-secondary select-none cursor-crosshair"
       onPointerDown={(e) => {
         setActive(true);
         move(e.clientX, e.clientY);
@@ -39,19 +52,32 @@ export function ZoomImage({ src, alt, zoom = 2.4 }: { src: string; alt: string; 
       onPointerUp={() => setActive(false)}
       onPointerCancel={() => setActive(false)}
     >
+      {/* Base Image */}
       <img
         src={src}
         alt={alt}
         draggable={false}
         className="h-full w-full object-cover"
-        style={{
-          transform: active ? `scale(${zoom})` : "scale(1)",
-          transformOrigin: `${origin.x}% ${origin.y}%`,
-          transition: active ? "none" : "transform 150ms ease-out",
-          willChange: "transform",
-        }}
       />
 
+      {/* Circular Magnifier Lens */}
+      {active && (
+        <div
+          className="pointer-events-none absolute rounded-full border-2 border-primary shadow-2xl overflow-hidden"
+          style={{
+            width: `${lensSize}px`,
+            height: `${lensSize}px`,
+            left: `${pos.x - lensSize / 2}px`,
+            top: `${pos.y - lensSize / 2}px`,
+            backgroundImage: `url("${src}")`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: `${zoom * 100}%`,
+            backgroundPosition: `${percent.x}% ${percent.y}%`,
+          }}
+        />
+      )}
+
+      {/* Label Badge */}
       <span className="label-caps pointer-events-none absolute bottom-3 left-3 bg-foreground/85 px-2 py-1 text-background">
         {active ? "Zooming" : "Hover / hold to zoom"}
       </span>
