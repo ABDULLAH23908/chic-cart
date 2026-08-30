@@ -1,38 +1,25 @@
 import { useRef, useState } from "react";
 
 /**
- * Magnifying-glass image viewer.
- * Works with mouse (hover) and touch (drag) via pointer events.
+ * Product image zoom. Scales the same rendered <img> around the pointer
+ * position via CSS transform, so the magnified view always matches exactly
+ * what's on screen — no separate background-image math to get out of sync
+ * with the image's actual crop.
+ * Works with mouse (hover) and touch (press-and-drag) via pointer events.
  */
-export function ZoomImage({
-  src,
-  alt,
-  zoom = 2.6,
-}: {
-  src: string;
-  alt: string;
-  zoom?: number;
-}) {
+export function ZoomImage({ src, alt, zoom = 2.4 }: { src: string; alt: string; zoom?: number }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
-  const [pos, setPos] = useState({ lx: 0, ly: 0, width: 0, height: 0 });
+  const [origin, setOrigin] = useState({ x: 50, y: 50 });
 
   const move = (clientX: number, clientY: number) => {
     const el = containerRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const lx = Math.min(Math.max(clientX - rect.left, 0), rect.width);
-    const ly = Math.min(Math.max(clientY - rect.top, 0), rect.height);
-    
-    setPos({
-      lx,
-      ly,
-      width: rect.width,
-      height: rect.height,
-    });
+    const x = (Math.min(Math.max(clientX - rect.left, 0), rect.width) / rect.width) * 100;
+    const y = (Math.min(Math.max(clientY - rect.top, 0), rect.height) / rect.height) * 100;
+    setOrigin({ x, y });
   };
-
-  const lensSize = 150;
 
   return (
     <div
@@ -52,25 +39,18 @@ export function ZoomImage({
       onPointerUp={() => setActive(false)}
       onPointerCancel={() => setActive(false)}
     >
-      <img src={src} alt={alt} className="h-full w-full object-cover" draggable={false} />
-
-      {active && (
-        <div
-          className="pointer-events-none absolute rounded-full border-2 border-foreground shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
-          style={{
-            width: lensSize,
-            height: lensSize,
-            left: pos.lx - lensSize / 2,
-            top: pos.ly - lensSize / 2,
-            backgroundImage: `url(${src})`,
-            backgroundRepeat: "no-repeat",
-            // Scale background relative to the full container size, not the lens size
-            backgroundSize: `${pos.width * zoom}px ${pos.height * zoom}px`,
-            // Offset background to point directly under the lens center
-            backgroundPosition: `-${pos.lx * zoom - lensSize / 2}px -${pos.ly * zoom - lensSize / 2}px`,
-          }}
-        />
-      )}
+      <img
+        src={src}
+        alt={alt}
+        draggable={false}
+        className="h-full w-full object-cover"
+        style={{
+          transform: active ? `scale(${zoom})` : "scale(1)",
+          transformOrigin: `${origin.x}% ${origin.y}%`,
+          transition: active ? "none" : "transform 150ms ease-out",
+          willChange: "transform",
+        }}
+      />
 
       <span className="label-caps pointer-events-none absolute bottom-3 left-3 bg-foreground/85 px-2 py-1 text-background">
         {active ? "Zooming" : "Hover / hold to zoom"}

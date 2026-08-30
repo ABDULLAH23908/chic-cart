@@ -6,6 +6,8 @@ import {
   STORE_NAME,
   STORE_TAGLINE,
   WHATSAPP_DISPLAY,
+  WHATSAPP_DISPLAY_2,
+  WHATSAPP_NUMBER_2,
   whatsappLink,
 } from "@/lib/shop";
 import { Logo } from "./Logo";
@@ -32,29 +34,17 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/shop" 
-                search={{ category: "men" }} 
-                className="hover:underline"
-              >
+              <Link to="/shop" search={{ category: "men" }} className="hover:underline">
                 Men
               </Link>
             </li>
             <li>
-              <Link 
-                to="/shop" 
-                search={{ category: "women" }} 
-                className="hover:underline"
-              >
+              <Link to="/shop" search={{ category: "women" }} className="hover:underline">
                 Women
               </Link>
             </li>
             <li>
-              <Link 
-                to="/shop" 
-                search={{ category: "unisex" }} 
-                className="hover:underline"
-              >
+              <Link to="/shop" search={{ category: "unisex" }} className="hover:underline">
                 Unisex
               </Link>
             </li>
@@ -81,6 +71,16 @@ export function Footer() {
                 className="hover:underline"
               >
                 WhatsApp {WHATSAPP_DISPLAY}
+              </a>
+            </li>
+            <li>
+              <a
+                href={whatsappLink("Hi! I have a question about a pair.", WHATSAPP_NUMBER_2)}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:underline"
+              >
+                WhatsApp {WHATSAPP_DISPLAY_2}
               </a>
             </li>
             <li>

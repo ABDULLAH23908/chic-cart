@@ -1,14 +1,13 @@
 export const WHATSAPP_NUMBER = "923355116194";
 export const WHATSAPP_DISPLAY = "+92 335 5116194";
+export const WHATSAPP_NUMBER_2 = "923175381080";
+export const WHATSAPP_DISPLAY_2 = "+92 317 5381080";
 export const STORE_NAME = "PRIME SHOES";
 export const STORE_SHORT_NAME = "PRIME";
 export const STORE_TAGLINE = "Prime Footwear · Premium Kicks";
 export const STORE_ADDRESS = "";
-export const STORE_MAPS_LINK =
-  "" +
-  encodeURIComponent("");
+export const STORE_MAPS_LINK = "" + encodeURIComponent("");
 export const STORE_RATING = "5.0";
-
 
 export const CATEGORIES = ["men", "women", "unisex"] as const;
 
@@ -37,8 +36,8 @@ export function formatPKR(value: number) {
   return "PKR " + new Intl.NumberFormat("en-PK").format(value);
 }
 
-export function whatsappLink(message: string) {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+export function whatsappLink(message: string, number: string = WHATSAPP_NUMBER) {
+  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }
 
 export const SOLD_VISIBLE_MS = 24 * 60 * 60 * 1000;

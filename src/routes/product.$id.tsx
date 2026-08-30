@@ -165,10 +165,25 @@ function ProductPage() {
               )}
             </button>
             <Link
-              to="/cart"
-              className="label-caps border border-foreground px-6 py-4 text-center transition-colors hover:bg-secondary"
+              to="/checkout"
+              onClick={() => {
+                if (!inBag) {
+                  add({
+                    id: product.id,
+                    title: product.title,
+                    brand: product.brand,
+                    size: product.size,
+                    price: product.price,
+                    image: images[0] ?? null,
+                  });
+                }
+              }}
+              className={
+                "label-caps border border-foreground px-6 py-4 text-center transition-colors hover:bg-secondary " +
+                (!product.in_stock ? "pointer-events-none opacity-40" : "")
+              }
             >
-              Go to bag
+              Buy now
             </Link>
           </div>
 

@@ -1,0 +1,222 @@
+diff --git a/src/components/site/Footer.tsx b/src/components/site/Footer.tsx
+index 39d0f6c..dc57a59 100644
+--- a/src/components/site/Footer.tsx
++++ b/src/components/site/Footer.tsx
+@@ -6,6 +6,8 @@ import {
+   STORE_NAME,
+   STORE_TAGLINE,
+   WHATSAPP_DISPLAY,
++  WHATSAPP_DISPLAY_2,
++  WHATSAPP_NUMBER_2,
+   whatsappLink,
+ } from "@/lib/shop";
+ import { Logo } from "./Logo";
+@@ -32,29 +34,17 @@ export function Footer() {
+               </Link>
+             </li>
+             <li>
+-              <Link 
+-                to="/shop" 
+-                search={{ category: "men" }} 
+-                className="hover:underline"
+-              >
++              <Link to="/shop" search={{ category: "men" }} className="hover:underline">
+                 Men
+               </Link>
+             </li>
+             <li>
+-              <Link 
+-                to="/shop" 
+-                search={{ category: "women" }} 
+-                className="hover:underline"
+-              >
++              <Link to="/shop" search={{ category: "women" }} className="hover:underline">
+                 Women
+               </Link>
+             </li>
+             <li>
+-              <Link 
+-                to="/shop" 
+-                search={{ category: "unisex" }} 
+-                className="hover:underline"
+-              >
++              <Link to="/shop" search={{ category: "unisex" }} className="hover:underline">
+                 Unisex
+               </Link>
+             </li>
+@@ -83,6 +73,16 @@ export function Footer() {
+                 WhatsApp {WHATSAPP_DISPLAY}
+               </a>
+             </li>
++            <li>
++              <a
++                href={whatsappLink("Hi! I have a question about a pair.", WHATSAPP_NUMBER_2)}
++                target="_blank"
++                rel="noreferrer"
++                className="hover:underline"
++              >
++                WhatsApp {WHATSAPP_DISPLAY_2}
++              </a>
++            </li>
+             <li>
+               <a
+                 href={STORE_MAPS_LINK}
+diff --git a/src/components/site/ZoomImage.tsx b/src/components/site/ZoomImage.tsx
+index 007cd9f..d11c6f1 100644
+--- a/src/components/site/ZoomImage.tsx
++++ b/src/components/site/ZoomImage.tsx
+@@ -1,39 +1,26 @@
+ import { useRef, useState } from "react";
+ 
+ /**
+- * Magnifying-glass image viewer.
+- * Works with mouse (hover) and touch (drag) via pointer events.
++ * Product image zoom. Scales the same rendered <img> around the pointer
++ * position via CSS transform, so the magnified view always matches exactly
++ * what's on screen — no separate background-image math to get out of sync
++ * with the image's actual crop.
++ * Works with mouse (hover) and touch (press-and-drag) via pointer events.
+  */
+-export function ZoomImage({
+-  src,
+-  alt,
+-  zoom = 2.6,
+-}: {
+-  src: string;
+-  alt: string;
+-  zoom?: number;
+-}) {
++export function ZoomImage({ src, alt, zoom = 2.4 }: { src: string; alt: string; zoom?: number }) {
+   const containerRef = useRef<HTMLDivElement>(null);
+   const [active, setActive] = useState(false);
+-  const [pos, setPos] = useState({ lx: 0, ly: 0, width: 0, height: 0 });
++  const [origin, setOrigin] = useState({ x: 50, y: 50 });
+ 
+   const move = (clientX: number, clientY: number) => {
+     const el = containerRef.current;
+     if (!el) return;
+     const rect = el.getBoundingClientRect();
+-    const lx = Math.min(Math.max(clientX - rect.left, 0), rect.width);
+-    const ly = Math.min(Math.max(clientY - rect.top, 0), rect.height);
+-    
+-    setPos({
+-      lx,
+-      ly,
+-      width: rect.width,
+-      height: rect.height,
+-    });
++    const x = (Math.min(Math.max(clientX - rect.left, 0), rect.width) / rect.width) * 100;
++    const y = (Math.min(Math.max(clientY - rect.top, 0), rect.height) / rect.height) * 100;
++    setOrigin({ x, y });
+   };
+ 
+-  const lensSize = 150;
+-
+   return (
+     <div
+       ref={containerRef}
+@@ -52,25 +39,18 @@ export function ZoomImage({
+       onPointerUp={() => setActive(false)}
+       onPointerCancel={() => setActive(false)}
+     >
+-      <img src={src} alt={alt} className="h-full w-full object-cover" draggable={false} />
+-
+-      {active && (
+-        <div
+-          className="pointer-events-none absolute rounded-full border-2 border-foreground shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
+-          style={{
+-            width: lensSize,
+-            height: lensSize,
+-            left: pos.lx - lensSize / 2,
+-            top: pos.ly - lensSize / 2,
+-            backgroundImage: `url(${src})`,
+-            backgroundRepeat: "no-repeat",
+-            // Scale background relative to the full container size, not the lens size
+-            backgroundSize: `${pos.width * zoom}px ${pos.height * zoom}px`,
+-            // Offset background to point directly under the lens center
+-            backgroundPosition: `-${pos.lx * zoom - lensSize / 2}px -${pos.ly * zoom - lensSize / 2}px`,
+-          }}
+-        />
+-      )}
++      <img
++        src={src}
++        alt={alt}
++        draggable={false}
++        className="h-full w-full object-cover"
++        style={{
++          transform: active ? `scale(${zoom})` : "scale(1)",
++          transformOrigin: `${origin.x}% ${origin.y}%`,
++          transition: active ? "none" : "transform 150ms ease-out",
++          willChange: "transform",
++        }}
++      />
+ 
+       <span className="label-caps pointer-events-none absolute bottom-3 left-3 bg-foreground/85 px-2 py-1 text-background">
+         {active ? "Zooming" : "Hover / hold to zoom"}
+diff --git a/src/lib/shop.ts b/src/lib/shop.ts
+index 824ef20..2c77d58 100644
+--- a/src/lib/shop.ts
++++ b/src/lib/shop.ts
+@@ -1,15 +1,14 @@
+ export const WHATSAPP_NUMBER = "923355116194";
+ export const WHATSAPP_DISPLAY = "+92 335 5116194";
++export const WHATSAPP_NUMBER_2 = "923175381080";
++export const WHATSAPP_DISPLAY_2 = "+92 317 5381080";
+ export const STORE_NAME = "PRIME SHOES";
+ export const STORE_SHORT_NAME = "PRIME";
+ export const STORE_TAGLINE = "Prime Footwear · Premium Kicks";
+ export const STORE_ADDRESS = "";
+-export const STORE_MAPS_LINK =
+-  "" +
+-  encodeURIComponent("");
++export const STORE_MAPS_LINK = "" + encodeURIComponent("");
+ export const STORE_RATING = "5.0";
+ 
+-
+ export const CATEGORIES = ["men", "women", "unisex"] as const;
+ 
+ export const BRANDS = ["Adidas", "Nike"] as const;
+@@ -37,8 +36,8 @@ export function formatPKR(value: number) {
+   return "PKR " + new Intl.NumberFormat("en-PK").format(value);
+ }
+ 
+-export function whatsappLink(message: string) {
+-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
++export function whatsappLink(message: string, number: string = WHATSAPP_NUMBER) {
++  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+ }
+ 
+ export const SOLD_VISIBLE_MS = 24 * 60 * 60 * 1000;
+diff --git a/src/routes/product.$id.tsx b/src/routes/product.$id.tsx
+index e5d29b7..93ae228 100644
+--- a/src/routes/product.$id.tsx
++++ b/src/routes/product.$id.tsx
+@@ -165,10 +165,25 @@ function ProductPage() {
+               )}
+             </button>
+             <Link
+-              to="/cart"
+-              className="label-caps border border-foreground px-6 py-4 text-center transition-colors hover:bg-secondary"
++              to="/checkout"
++              onClick={() => {
++                if (!inBag) {
++                  add({
++                    id: product.id,
++                    title: product.title,
++                    brand: product.brand,
++                    size: product.size,
++                    price: product.price,
++                    image: images[0] ?? null,
++                  });
++                }
++              }}
++              className={
++                "label-caps border border-foreground px-6 py-4 text-center transition-colors hover:bg-secondary " +
++                (!product.in_stock ? "pointer-events-none opacity-40" : "")
++              }
+             >
+-              Go to bag
++              Buy now
+             </Link>
+           </div>
+ 
