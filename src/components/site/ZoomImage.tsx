@@ -3,8 +3,8 @@ import { useRef, useState } from "react";
 interface ProductImageZoomProps {
   src: string;
   alt: string;
-  zoomFactor?: number; // Magnification factor (e.g., 2.5 = 250% zoom)
-  lensSize?: number; // Diameter of the lens in pixels
+  zoomFactor?: number;
+  lensSize?: number;
 }
 
 export function ProductImageZoom({
@@ -24,15 +24,12 @@ export function ProductImageZoom({
     if (!el) return;
     const rect = el.getBoundingClientRect();
 
-    // Mouse coordinates relative to the top-left of the container
     const rawX = clientX - rect.left;
     const rawY = clientY - rect.top;
 
-    // Clamp mouse coordinates inside container edges
     const x = Math.min(Math.max(rawX, 0), rect.width);
     const y = Math.min(Math.max(rawY, 0), rect.height);
 
-    // Keep the lens visual circle within the container bounds
     const clampedLensX = Math.min(
       Math.max(x, lensSize / 2),
       rect.width - lensSize / 2
@@ -44,16 +41,14 @@ export function ProductImageZoom({
 
     setLensPos({ x: clampedLensX, y: clampedLensY });
 
-    // Set magnified size relative to the container element width/height
-    setBgSize({
-      w: rect.width * zoomFactor,
-      h: rect.height * zoomFactor,
-    });
+    // Set magnified size according to full container size
+    const zoomedW = rect.width * zoomFactor;
+    const zoomedH = rect.height * zoomFactor;
+    setBgSize({ w: zoomedW, h: zoomedH });
 
-    // Calculate background pixel position to align exact focal point under lens center
+    // Exact zoom alignment using background-position offset
     const bgX = -(x * zoomFactor - lensSize / 2);
     const bgY = -(y * zoomFactor - lensSize / 2);
-
     setBgPos({ x: bgX, y: bgY });
   }
 
@@ -78,18 +73,18 @@ export function ProductImageZoom({
   return (
     <div
       ref={containerRef}
-      className="relative aspect-square w-full h-full overflow-hidden cursor-crosshair select-none touch-none bg-background border border-border rounded-lg"
+      className="relative aspect-square w-full overflow-hidden cursor-crosshair select-none touch-none bg-secondary border border-border rounded-lg"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       onPointerUp={handlePointerLeave}
       onPointerCancel={handlePointerLeave}
     >
-      {/* Base Display Image */}
+      {/* Base Display Image — Changed from object-contain to object-cover */}
       <img
         src={src}
         alt={alt}
-        className="w-full h-full object-contain pointer-events-none"
+        className="w-full h-full object-cover pointer-events-none"
         draggable={false}
       />
 
@@ -113,6 +108,5 @@ export function ProductImageZoom({
   );
 }
 
-// Re-export as ZoomImage to prevent build errors in product routes
 export { ProductImageZoom as ZoomImage };
 export type { ProductImageZoomProps as ZoomImageProps };
