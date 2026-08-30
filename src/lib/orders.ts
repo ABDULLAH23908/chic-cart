@@ -88,8 +88,48 @@ export type PlaceOrderInput = {
   items: CartItem[];
 };
 
+export type OrderWithItems = Order & { order_items: OrderItem[] };
+
 export function paymentLabel(id: string) {
   return PAYMENT_METHODS.find((m) => m.id === id)?.label ?? id;
+}
+
+/** All orders with their line items, newest first — for the admin panel. */
+export async function fetchOrders(): Promise<OrderWithItems[]> {
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*, order_items(*)")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data as OrderWithItems[];
+}
+
+/**
+ * Confirms an order's payment: flips its status to "verified" and marks every
+ * product in the order sold (in_stock = false) so it drops off the storefront.
+ */
+export async function verifyOrder(order: OrderWithItems): Promise<void> {
+  const { error } = await supabase.from("orders").update({ status: "verified" }).eq("id", order.id);
+  if (error) throw error;
+
+  const productIds = order.order_items.map((i) => i.product_id).filter((id): id is string => !!id);
+  if (productIds.length === 0) return;
+
+  const { error: stockError } = await supabase
+    .from("products")
+    .update({ in_stock: false })
+    .in("id", productIds);
+  if (stockError) throw stockError;
+}
+
+export async function rejectOrder(id: string): Promise<void> {
+  const { error } = await supabase.from("orders").update({ status: "rejected" }).eq("id", id);
+  if (error) throw error;
+}
+
+export async function deleteOrder(id: string): Promise<void> {
+  const { error } = await supabase.from("orders").delete().eq("id", id);
+  if (error) throw error;
 }
 
 export async function placeOrder(input: PlaceOrderInput): Promise<string> {
