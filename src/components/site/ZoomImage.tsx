@@ -112,3 +112,7 @@ export function ProductImageZoom({
     </div>
   );
 }
+
+// Re-export as ZoomImage to prevent build errors in product routes
+export { ProductImageZoom as ZoomImage };
+export type { ProductImageZoomProps as ZoomImageProps };
