@@ -16,7 +16,7 @@ export function ZoomImage({
   const containerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 }); // Mouse position relative to container (px)
-  const [percent, setPercent] = useState({ x: 50, y: 50 }); // Mouse position relative to container (%)
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
   const move = (clientX: number, clientY: number) => {
     const el = containerRef.current;
@@ -28,10 +28,7 @@ export function ZoomImage({
     const yPx = Math.min(Math.max(clientY - rect.top, 0), rect.height);
 
     setPos({ x: xPx, y: yPx });
-    setPercent({
-      x: (xPx / rect.width) * 100,
-      y: (yPx / rect.height) * 100,
-    });
+    setContainerSize({ width: rect.width, height: rect.height });
   };
 
   return (
@@ -71,8 +68,8 @@ export function ZoomImage({
             top: `${pos.y - lensSize / 2}px`,
             backgroundImage: `url("${src}")`,
             backgroundRepeat: "no-repeat",
-            backgroundSize: `${zoom * 100}%`,
-            backgroundPosition: `${percent.x}% ${percent.y}%`,
+            backgroundSize: `${containerSize.width * zoom}px ${containerSize.height * zoom}px`,
+            backgroundPosition: `${lensSize / 2 - pos.x * zoom}px ${lensSize / 2 - pos.y * zoom}px`,
           }}
         />
       )}
