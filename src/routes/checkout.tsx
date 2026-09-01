@@ -236,6 +236,14 @@ function CheckoutPage() {
                 <div>
                   <p className="label-caps text-muted-foreground">{selected.account.title}</p>
                   <p className="font-display text-xl font-black">{selected.account.number}</p>
+                  {selected.account.iban && (
+                    <p className="text-xs text-muted-foreground">IBAN: {selected.account.iban}</p>
+                  )}
+                  {selected.account.branch && (
+                    <p className="text-xs text-muted-foreground">
+                      Branch: {selected.account.branch}
+                    </p>
+                  )}
                   <p className="text-xs text-muted-foreground">
                     Account title: {selected.account.holder} · Send exactly {formatPKR(total)}
                   </p>

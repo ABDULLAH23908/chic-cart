@@ -9,7 +9,7 @@ export type PaymentMethod = {
   label: string;
   blurb: string;
   /** Account details shown to the customer for manual transfers. */
-  account?: { title: string; number: string; holder: string };
+  account?: { title: string; number: string; holder: string; iban?: string; branch?: string };
   /** Scannable QR image for bank transfers. */
   qr?: string;
   requiresReceipt: boolean;
@@ -28,8 +28,14 @@ export const PAYMENT_METHODS: PaymentMethod[] = [
   {
     id: "bank",
     label: "Bank transfer (HBL)",
-    blurb: "Scan the HBL QR code in any banking app, then attach the receipt below.",
-    account: { title: "HBL Bank", number: "Scan the QR code", holder: ACCOUNT_HOLDER },
+    blurb: "Scan the HBL QR code or transfer using the account details below, then attach the receipt below.",
+    account: {
+      title: "HBL Bank",
+      number: "10677901106403",
+      holder: ACCOUNT_HOLDER,
+      iban: "PK22HABB0010677901106403",
+      branch: "SOHAWA",
+    },
     qr: hblQr.url,
     requiresReceipt: true,
   },

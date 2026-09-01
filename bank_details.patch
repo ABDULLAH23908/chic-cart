@@ -1,0 +1,49 @@
+diff --git a/src/lib/orders.ts b/src/lib/orders.ts
+index c93c783..91d9289 100644
+--- a/src/lib/orders.ts
++++ b/src/lib/orders.ts
+@@ -9,7 +9,7 @@ export type PaymentMethod = {
+   label: string;
+   blurb: string;
+   /** Account details shown to the customer for manual transfers. */
+-  account?: { title: string; number: string; holder: string };
++  account?: { title: string; number: string; holder: string; iban?: string; branch?: string };
+   /** Scannable QR image for bank transfers. */
+   qr?: string;
+   requiresReceipt: boolean;
+@@ -28,8 +28,14 @@ export const PAYMENT_METHODS: PaymentMethod[] = [
+   {
+     id: "bank",
+     label: "Bank transfer (HBL)",
+-    blurb: "Scan the HBL QR code in any banking app, then attach the receipt below.",
+-    account: { title: "HBL Bank", number: "Scan the QR code", holder: ACCOUNT_HOLDER },
++    blurb: "Scan the HBL QR code or transfer using the account details below, then attach the receipt below.",
++    account: {
++      title: "HBL Bank",
++      number: "10677901106403",
++      holder: ACCOUNT_HOLDER,
++      iban: "PK22HABB0010677901106403",
++      branch: "SOHAWA",
++    },
+     qr: hblQr.url,
+     requiresReceipt: true,
+   },
+diff --git a/src/routes/checkout.tsx b/src/routes/checkout.tsx
+index 2f97317..21e7098 100644
+--- a/src/routes/checkout.tsx
++++ b/src/routes/checkout.tsx
+@@ -236,6 +236,14 @@ function CheckoutPage() {
+                 <div>
+                   <p className="label-caps text-muted-foreground">{selected.account.title}</p>
+                   <p className="font-display text-xl font-black">{selected.account.number}</p>
++                  {selected.account.iban && (
++                    <p className="text-xs text-muted-foreground">IBAN: {selected.account.iban}</p>
++                  )}
++                  {selected.account.branch && (
++                    <p className="text-xs text-muted-foreground">
++                      Branch: {selected.account.branch}
++                    </p>
++                  )}
+                   <p className="text-xs text-muted-foreground">
+                     Account title: {selected.account.holder} · Send exactly {formatPKR(total)}
+                   </p>
