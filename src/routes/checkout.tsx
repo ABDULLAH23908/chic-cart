@@ -225,12 +225,21 @@ function CheckoutPage() {
             </div>
 
             {selected.account && (
-              <div className="border border-border bg-secondary p-4">
-                <p className="label-caps text-muted-foreground">{selected.account.title}</p>
-                <p className="font-display text-xl font-black">{selected.account.number}</p>
-                <p className="text-xs text-muted-foreground">
-                  Account title: {selected.account.holder} · Send exactly {formatPKR(total)}
-                </p>
+              <div className="border border-border bg-secondary p-4 sm:flex sm:items-center sm:gap-5">
+                {selected.qr && (
+                  <img
+                    src={selected.qr}
+                    alt={`${selected.account.title} QR code for ${selected.account.holder}`}
+                    className="mb-4 w-40 border border-border bg-background p-2 sm:mb-0"
+                  />
+                )}
+                <div>
+                  <p className="label-caps text-muted-foreground">{selected.account.title}</p>
+                  <p className="font-display text-xl font-black">{selected.account.number}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Account title: {selected.account.holder} · Send exactly {formatPKR(total)}
+                  </p>
+                </div>
               </div>
             )}
 
