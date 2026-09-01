@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { CartItem } from "@/lib/cart";
-import { WHATSAPP_DISPLAY } from "@/lib/shop";
+import hblQr from "@/assets/hbl-qr.png.asset.json";
 
 export type PaymentMethodId = "cod" | "jazzcash" | "easypaisa" | "bank";
 
@@ -10,12 +10,13 @@ export type PaymentMethod = {
   blurb: string;
   /** Account details shown to the customer for manual transfers. */
   account?: { title: string; number: string; holder: string };
+  /** Scannable QR image for bank transfers. */
+  qr?: string;
   requiresReceipt: boolean;
 };
 
-/** All transfers land on the store's WhatsApp number. */
-const ACCOUNT_NUMBER = "0335 5116194";
-const ACCOUNT_HOLDER = "Prime Shoes";
+const WALLET_NUMBER = "+92 335 5116194";
+const ACCOUNT_HOLDER = "Najam Shehzad";
 
 export const PAYMENT_METHODS: PaymentMethod[] = [
   {
@@ -25,27 +26,29 @@ export const PAYMENT_METHODS: PaymentMethod[] = [
     requiresReceipt: false,
   },
   {
+    id: "bank",
+    label: "Bank transfer (HBL)",
+    blurb: "Scan the HBL QR code in any banking app, then attach the receipt below.",
+    account: { title: "HBL Bank", number: "Scan the QR code", holder: ACCOUNT_HOLDER },
+    qr: hblQr.url,
+    requiresReceipt: true,
+  },
+  {
     id: "jazzcash",
     label: "JazzCash",
-    blurb: `Send the total to our JazzCash account, then attach the receipt below.`,
-    account: { title: "JazzCash", number: ACCOUNT_NUMBER, holder: ACCOUNT_HOLDER },
+    blurb: "Send the total to our JazzCash account, then attach the receipt below.",
+    account: { title: "JazzCash", number: WALLET_NUMBER, holder: ACCOUNT_HOLDER },
     requiresReceipt: true,
   },
   {
     id: "easypaisa",
     label: "Easypaisa",
     blurb: "Send the total to our Easypaisa account, then attach the receipt below.",
-    account: { title: "Easypaisa", number: ACCOUNT_NUMBER, holder: ACCOUNT_HOLDER },
-    requiresReceipt: true,
-  },
-  {
-    id: "bank",
-    label: "Bank transfer / Raast",
-    blurb: `Transfer to the Raast ID below (same as our WhatsApp line ${WHATSAPP_DISPLAY}), then attach the receipt.`,
-    account: { title: "Raast ID", number: ACCOUNT_NUMBER, holder: ACCOUNT_HOLDER },
+    account: { title: "Easypaisa", number: WALLET_NUMBER, holder: ACCOUNT_HOLDER },
     requiresReceipt: true,
   },
 ];
+
 
 export type OrderStatus = "pending" | "verified" | "rejected";
 
